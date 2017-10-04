@@ -7,12 +7,17 @@ import com.maykop_mmz.ppo.waybillImport.utils.PropertiesUtils;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
 
-public class MainGui extends JDialog {
+public class MainGui extends JFrame {
+    Logger log = Logger.getLogger(Logging.getCurrentClassName());
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -26,23 +31,54 @@ public class MainGui extends JDialog {
     private JButton rash1SearchButton;
     private JButton prih3SearchButton;
     private JButton rash3SearchButton;
-    private JButton подробнееButton;
+    private JButton moreInfoButton;
     private JLabel statusLabel;
     private JTextPane textPane;
-    Logger log = Logger.getLogger(Logging.getCurrentClassName());
+    private JLabel ostLabel;
+    private JLabel prih1Label;
+    private JLabel prih3Label;
+    private JLabel rash1Label;
+    private JLabel rash3Label;
+    private JTextField textField1;
 
     public MainGui() {
         createGui();
         fillSettingsToFields();
     }
 
-    private void fillSettingsToFields() {
-        log.info("Loading settings to panel");
-        ostDbfTextField.setText(PropertiesUtils.getProperty(PropertiesNames.OST_DBF_NAME));
-        prih1DbfTextField.setText(PropertiesUtils.getProperty(PropertiesNames.PRIH1_DBF_NAME));
-        rash1DbfTextField.setText(PropertiesUtils.getProperty(PropertiesNames.RASH1_DBF_NAME));
-        prih3DbfTextField.setText(PropertiesUtils.getProperty(PropertiesNames.PRIH3_DBF_NAME));
-        rash3DbfTextField.setText(PropertiesUtils.getProperty(PropertiesNames.RASH3_DBF_NAME));
+    private void addInfoToTextPane(String text, Level level) {
+        try {
+            Document doc = textPane.getDocument();
+            doc.insertString(doc.getLength(), text, null);
+        } catch(BadLocationException exc) {
+            exc.printStackTrace();
+        }
+    }
+
+    private void checkFile(JLabel label, String path) throws FileNotFoundException {
+        if (checkFileExistence(path)) {
+            label.setForeground(new Color(0, 172, 0));
+        } else {
+            label.setForeground(Color.red);
+            throw new FileNotFoundException("Can not find ost file: " + path);
+        }
+    }
+
+    private boolean checkFileExistence(String path) {
+        return new File(path).exists();
+    }
+
+    private void checkFilesLocations() throws FileNotFoundException {
+        statusLabel.setText("Проверяю путь к файлу остатков");
+        checkFile(ostLabel, ostDbfTextField.getText());
+        statusLabel.setText("Проверяю путь к файлу прихода СЗ");
+        checkFile(prih1Label, prih1DbfTextField.getText());
+        statusLabel.setText("Проверяю путь к файлу расхода СЗ");
+        checkFile(rash1Label, rash1DbfTextField.getText());
+        statusLabel.setText("Проверяю путь к файлу прихода СГ");
+        checkFile(prih3Label, prih3DbfTextField.getText());
+        statusLabel.setText("Проверяю путь к файлу расхода СГ");
+        checkFile(rash3Label, rash3DbfTextField.getText());
     }
 
     private void createGui() {
@@ -56,7 +92,7 @@ public class MainGui extends JDialog {
         buttonCancel.addActionListener(e -> onCancel());
 
         // call onCancel() when cross is clicked
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 onCancel();
@@ -70,12 +106,29 @@ public class MainGui extends JDialog {
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         pack();
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
-        FrameUtils.showOnTop(this);
+    }
+
+    private void fillSettingsToFields() {
+        log.info("Loading settings to panel");
+        ostDbfTextField.setText(PropertiesUtils.getProperty(PropertiesNames.OST_DBF_NAME));
+        prih1DbfTextField.setText(PropertiesUtils.getProperty(PropertiesNames.PRIH1_DBF_NAME));
+        rash1DbfTextField.setText(PropertiesUtils.getProperty(PropertiesNames.RASH1_DBF_NAME));
+        prih3DbfTextField.setText(PropertiesUtils.getProperty(PropertiesNames.PRIH3_DBF_NAME));
+        rash3DbfTextField.setText(PropertiesUtils.getProperty(PropertiesNames.RASH3_DBF_NAME));
+    }
+
+    private void onCancel() {
+        dispose();
     }
 
     private void onOK() {
         saveSettings();
-
+        try {
+            checkFilesLocations();
+        } catch (FileNotFoundException e) {
+            statusLabel.setText("Файл не найден");
+            log.warn("Could not find a file", e);
+        }
         //dispose();
     }
 
@@ -89,8 +142,5 @@ public class MainGui extends JDialog {
         PropertiesUtils.saveProperties();
     }
 
-    private void onCancel() {
-        // add your code here if necessary
-        dispose();
-    }
+    enum Level {INFO, SUCCESS, WARN}
 }
