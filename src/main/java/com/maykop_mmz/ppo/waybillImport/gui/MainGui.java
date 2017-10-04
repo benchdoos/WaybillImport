@@ -7,8 +7,7 @@ import com.maykop_mmz.ppo.waybillImport.utils.PropertiesUtils;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
+import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -40,6 +39,8 @@ public class MainGui extends JFrame {
     private JLabel rash1Label;
     private JLabel rash3Label;
     private JTextField textField1;
+    final Color DEFAULT_GREEN_COLOR = new Color(0, 172, 0);
+
 
     public MainGui() {
         createGui();
@@ -47,17 +48,37 @@ public class MainGui extends JFrame {
     }
 
     private void addInfoToTextPane(String text, Level level) {
+        Style style;
+        StyleContext sc = new StyleContext();
+        style = sc.addStyle("Heading2", null);
+        switch (level) {
+            case INFO:
+
+                break;
+            case WARN:
+                style.addAttribute(StyleConstants.Foreground, Color.red);
+                text = "<font color='red'>" + text + "</font>";
+                break;
+            case SUCCESS:
+                style.addAttribute(StyleConstants.Foreground, DEFAULT_GREEN_COLOR);
+                text = "<font color='green'>" + text + "</font>";
+                break;
+            default:
+                break;
+        }
+
+
         try {
-            Document doc = textPane.getDocument();
-            doc.insertString(doc.getLength(), text, null);
-        } catch(BadLocationException exc) {
+            Document doc = textPane.getStyledDocument();
+            doc.insertString(doc.getLength(), text + "<br>", null);
+        } catch (BadLocationException exc) {
             exc.printStackTrace();
         }
     }
 
     private void checkFile(JLabel label, String path) throws FileNotFoundException {
         if (checkFileExistence(path)) {
-            label.setForeground(new Color(0, 172, 0));
+            label.setForeground(DEFAULT_GREEN_COLOR);
         } else {
             label.setForeground(Color.red);
             throw new FileNotFoundException("Can not find ost file: " + path);
@@ -69,10 +90,17 @@ public class MainGui extends JFrame {
     }
 
     private void checkFilesLocations() throws FileNotFoundException {
-        statusLabel.setText("Проверяю путь к файлу остатков");
+        final String ostCheckString = "Проверяю путь к файлу остатков";
+        addInfoToTextPane(ostCheckString, Level.INFO);
+        statusLabel.setText(ostCheckString);
         checkFile(ostLabel, ostDbfTextField.getText());
-        statusLabel.setText("Проверяю путь к файлу прихода СЗ");
+
+
+        final String prih1CheckString = "Проверяю путь к файлу прихода СЗ";
+        addInfoToTextPane(prih1CheckString, Level.INFO);
+        statusLabel.setText(prih1CheckString);
         checkFile(prih1Label, prih1DbfTextField.getText());
+
         statusLabel.setText("Проверяю путь к файлу расхода СЗ");
         checkFile(rash1Label, rash1DbfTextField.getText());
         statusLabel.setText("Проверяю путь к файлу прихода СГ");
@@ -86,6 +114,9 @@ public class MainGui extends JFrame {
         setTitle("Импорт накладных в базу данных DBase3 - ООО \"ММЗ\"");
         setIconImage(Toolkit.getDefaultToolkit().getImage(MainGui.class.getResource("/img/logo.png")));
         getRootPane().setDefaultButton(buttonOK);
+
+        textPane.setContentType("text/html");
+        textPane.setText("<html>");
 
         buttonOK.addActionListener(e -> onOK());
 
@@ -126,7 +157,9 @@ public class MainGui extends JFrame {
         try {
             checkFilesLocations();
         } catch (FileNotFoundException e) {
-            statusLabel.setText("Файл не найден");
+            final String fileNotFound = "Файл не найден";
+            statusLabel.setText(fileNotFound);
+            addInfoToTextPane(fileNotFound, Level.WARN);
             log.warn("Could not find a file", e);
         }
         //dispose();

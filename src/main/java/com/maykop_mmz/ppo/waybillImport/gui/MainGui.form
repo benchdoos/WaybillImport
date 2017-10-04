@@ -205,11 +205,16 @@
               <grid row="6" column="0" row-span="2" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
+            <clientProperties>
+              <html.disable class="java.lang.Boolean" value="false"/>
+            </clientProperties>
             <border type="none"/>
             <children>
               <component id="f8546" class="javax.swing.JTextPane" binding="textPane">
                 <constraints/>
-                <properties/>
+                <properties>
+                  <contentType value="text/html"/>
+                </properties>
               </component>
             </children>
           </scrollpane>
