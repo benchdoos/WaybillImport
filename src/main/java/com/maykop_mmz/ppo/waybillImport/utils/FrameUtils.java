@@ -1,13 +1,20 @@
 package com.maykop_mmz.ppo.waybillImport.utils;
+import org.apache.log4j.Logger;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static com.maykop_mmz.ppo.waybillImport.utils.Logging.getCurrentClassName;
+
 /**
  * Created by Eugene Zrazhevsky on 30.10.2016.
  */
 public class FrameUtils {
+    private static final Logger log = Logger.getLogger(getCurrentClassName());
+
+
     private static final Timer timer = new Timer(60, null);
 
     /**
@@ -18,7 +25,7 @@ public class FrameUtils {
      */
     public static Point getFrameOnCenterLocationPoint(Window window) {
         Dimension size = window.getSize();
-        System.out.println("size: " + size);
+        log.debug("Frame size: " +size);
         int width = (int) ((Toolkit.getDefaultToolkit().getScreenSize().width / (double) 2) - (size.getWidth() / (double) 2));
         int height = (int) ((Toolkit.getDefaultToolkit().getScreenSize().height / (double) 2) - (size.getHeight() / (double) 2));
         return new Point(width, height);

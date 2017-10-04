@@ -10,6 +10,9 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+
+        <Property name="log-path">logs</Property>
+        <Property name="LEVEL">DEBUG</Property> <!-- default value -->
     </properties>
 
 
