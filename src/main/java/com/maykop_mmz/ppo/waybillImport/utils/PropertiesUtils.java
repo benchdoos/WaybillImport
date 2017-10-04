@@ -21,8 +21,9 @@ public class PropertiesUtils {
         File file = new File(ApplicationConstants.PROPERTIES_FILE_PATH);
         if (file.exists()) {
             try {
+                log.debug("File " + ApplicationConstants.PROPERTIES_FILE_PATH + " exists");
                 FileInputStream fileInputStream = new FileInputStream(file);
-                properties.load(fileInputStream);
+                properties.loadFromXML(fileInputStream);
             } catch (FileNotFoundException e) {
                 log.warn("Can not find settings: " + file.getPath());
             } catch (IOException e) {

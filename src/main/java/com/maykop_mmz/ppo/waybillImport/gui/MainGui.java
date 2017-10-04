@@ -1,8 +1,10 @@
 package com.maykop_mmz.ppo.waybillImport.gui;
 
 import com.maykop_mmz.ppo.waybillImport.utils.FrameUtils;
+import com.maykop_mmz.ppo.waybillImport.utils.Logging;
 import com.maykop_mmz.ppo.waybillImport.utils.PropertiesNames;
 import com.maykop_mmz.ppo.waybillImport.utils.PropertiesUtils;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -23,6 +25,7 @@ public class MainGui extends JDialog {
     private JButton rash1SearchButton;
     private JButton prih3SearchButton;
     private JButton rash3SearchButton;
+    Logger log = Logger.getLogger(Logging.getCurrentClassName());
 
     public MainGui() {
         createGui();
@@ -30,6 +33,7 @@ public class MainGui extends JDialog {
     }
 
     private void fillSettingsToFields() {
+        log.info("Loading settings to panel");
         ostDbfTextField.setText(PropertiesUtils.getProperty(PropertiesNames.OST_DBF_NAME));
         prih1DbfTextField.setText(PropertiesUtils.getProperty(PropertiesNames.PRIH1_DBF_NAME));
         rash1DbfTextField.setText(PropertiesUtils.getProperty(PropertiesNames.RASH1_DBF_NAME));
@@ -39,7 +43,7 @@ public class MainGui extends JDialog {
 
     private void createGui() {
         setContentPane(contentPane);
-        setTitle("Импорт накладных в базу данных DBase3");
+        setTitle("Импорт накладных в базу данных DBase3 - ООО \"ММЗ\"");
         getRootPane().setDefaultButton(buttonOK);
 
         buttonOK.addActionListener(e -> onOK());
@@ -67,11 +71,12 @@ public class MainGui extends JDialog {
     }
 
     private void saveSettings() {
-        PropertiesUtils.setProperty(PropertiesNames.OST_DBF_NAME,ostDbfTextField.getText());
-        PropertiesUtils.setProperty(PropertiesNames.PRIH1_DBF_NAME,prih1DbfTextField.getText());
-        PropertiesUtils.setProperty(PropertiesNames.RASH1_DBF_NAME,rash1DbfTextField.getText());
-        PropertiesUtils.setProperty(PropertiesNames.PRIH3_DBF_NAME,prih3DbfTextField.getText());
-        PropertiesUtils.setProperty(PropertiesNames.RASH3_DBF_NAME,rash3DbfTextField.getText());
+        log.info("Saving settings");
+        PropertiesUtils.setProperty(PropertiesNames.OST_DBF_NAME, ostDbfTextField.getText());
+        PropertiesUtils.setProperty(PropertiesNames.PRIH1_DBF_NAME, prih1DbfTextField.getText());
+        PropertiesUtils.setProperty(PropertiesNames.RASH1_DBF_NAME, rash1DbfTextField.getText());
+        PropertiesUtils.setProperty(PropertiesNames.PRIH3_DBF_NAME, prih3DbfTextField.getText());
+        PropertiesUtils.setProperty(PropertiesNames.RASH3_DBF_NAME, rash3DbfTextField.getText());
         PropertiesUtils.saveProperties();
     }
 
