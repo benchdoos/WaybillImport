@@ -2,15 +2,35 @@ package com.maykop_mmz.ppo.waybillImport.core;
 
 import com.maykop_mmz.ppo.waybillImport.gui.MainGui;
 import com.maykop_mmz.ppo.waybillImport.utils.Logging;
+import com.maykop_mmz.ppo.waybillImport.utils.PropertiesUtils;
+import org.apache.log4j.Logger;
 
-import java.util.logging.Logger;
+import javax.swing.*;
 
 public class Main {
     private static Logger log;
+
     public static void main(String[] args) {
         initLogging();
+        PropertiesUtils.loadProperties();
+
+        enableLookAndFeel();
+
         MainGui gui = new MainGui();
         gui.setVisible(true);
+    }
+
+    /**
+     * Enables LookAndFeel for current OS.
+     *
+     * @see javax.swing.UIManager.LookAndFeelInfo
+     */
+    private static void enableLookAndFeel() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            log.warn("Can not enable LookAndFeel", e);
+        }
     }
 
     private static void initLogging() {
