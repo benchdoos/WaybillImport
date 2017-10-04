@@ -48,9 +48,7 @@ public class MainGui extends JFrame {
         fillSettingsToFields();
 
 
-        moreInfoButton.addActionListener(e -> {
-            showMoreInfo();
-        });
+        moreInfoButton.addActionListener(e -> showMoreInfo());
     }
 
     private void addInfoToTextPane(String text, Level level) {
@@ -115,7 +113,7 @@ public class MainGui extends JFrame {
 
     private void createGui() {
         setContentPane(contentPane);
-        setTitle("Импорт накладных в базу данных DBase3 - ООО \"ММЗ\"");
+        setTitle("Импорт накладных в БД DBase3 - ООО \"ММЗ\"");
         setIconImage(Toolkit.getDefaultToolkit().getImage(MainGui.class.getResource("/img/logo.png")));
         getRootPane().setDefaultButton(buttonOK);
 
@@ -126,22 +124,12 @@ public class MainGui extends JFrame {
 
         buttonCancel.addActionListener(e -> onCancel());
 
-        ostSearchButton.addActionListener(e -> {
-            ostDbfTextField.setText(openFileBrowser());
-        });
-        prih1SearchButton.addActionListener(e -> {
-            prih1DbfTextField.setText(openFileBrowser());
-        });
-        rash1SearchButton.addActionListener(e -> {
-            rash1DbfTextField.setText(openFileBrowser());
-        });
-        prih3SearchButton.addActionListener(e -> {
-            prih3DbfTextField.setText(openFileBrowser());
-        });
+        ostSearchButton.addActionListener(e -> ostDbfTextField.setText(openFileBrowser()));
+        prih1SearchButton.addActionListener(e -> prih1DbfTextField.setText(openFileBrowser()));
+        rash1SearchButton.addActionListener(e -> rash1DbfTextField.setText(openFileBrowser()));
+        prih3SearchButton.addActionListener(e -> prih3DbfTextField.setText(openFileBrowser()));
 
-        rash3SearchButton.addActionListener(e -> {
-            rash3DbfTextField.setText(openFileBrowser());
-        });
+        rash3SearchButton.addActionListener(e -> rash3DbfTextField.setText(openFileBrowser()));
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -218,7 +206,8 @@ public class MainGui extends JFrame {
     }
 
     private void showMoreInfo() {
-        throw new UnsupportedOperationException();
+        LogInfoDialog infoDialog = new LogInfoDialog(textPane);
+        infoDialog.setVisible(true);
     }
 
     enum Level {INFO, SUCCESS, WARN}

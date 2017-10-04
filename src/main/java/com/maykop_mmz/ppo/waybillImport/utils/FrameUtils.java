@@ -61,6 +61,7 @@ public class FrameUtils {
                 int counter = 0;
                 int step = 14;
 
+                @SuppressWarnings("ConstantConditions")
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if (counter <= 2) {
