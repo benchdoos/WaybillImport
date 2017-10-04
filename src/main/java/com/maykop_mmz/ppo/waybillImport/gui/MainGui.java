@@ -7,6 +7,7 @@ import com.maykop_mmz.ppo.waybillImport.utils.PropertiesUtils;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -25,6 +26,9 @@ public class MainGui extends JDialog {
     private JButton rash1SearchButton;
     private JButton prih3SearchButton;
     private JButton rash3SearchButton;
+    private JButton подробнееButton;
+    private JLabel statusLabel;
+    private JTextPane textPane;
     Logger log = Logger.getLogger(Logging.getCurrentClassName());
 
     public MainGui() {
@@ -44,6 +48,7 @@ public class MainGui extends JDialog {
     private void createGui() {
         setContentPane(contentPane);
         setTitle("Импорт накладных в базу данных DBase3 - ООО \"ММЗ\"");
+        setIconImage(Toolkit.getDefaultToolkit().getImage(MainGui.class.getResource("/img/logo.png")));
         getRootPane().setDefaultButton(buttonOK);
 
         buttonOK.addActionListener(e -> onOK());
@@ -58,6 +63,9 @@ public class MainGui extends JDialog {
             }
         });
 
+        textPane.setEditorKit(JEditorPane.createEditorKitForContentType("text/html"));
+        textPane.setEditable(false);
+
         // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         pack();
@@ -67,7 +75,8 @@ public class MainGui extends JDialog {
 
     private void onOK() {
         saveSettings();
-        dispose();
+
+        //dispose();
     }
 
     private void saveSettings() {
