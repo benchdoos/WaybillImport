@@ -25,7 +25,6 @@ public class FrameUtils {
      */
     public static Point getFrameOnCenterLocationPoint(Window window) {
         Dimension size = window.getSize();
-        log.debug("Frame size: " +size);
         int width = (int) ((Toolkit.getDefaultToolkit().getScreenSize().width / (double) 2) - (size.getWidth() / (double) 2));
         int height = (int) ((Toolkit.getDefaultToolkit().getScreenSize().height / (double) 2) - (size.getHeight() / (double) 2));
         return new Point(width, height);
