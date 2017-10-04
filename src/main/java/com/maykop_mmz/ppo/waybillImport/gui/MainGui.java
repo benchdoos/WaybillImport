@@ -14,6 +14,7 @@ public class MainGui extends JDialog {
     private JTextField rash1DbfTextField;
     private JTextField prih3DbfTextField;
     private JTextField rash3DbfTextField;
+    private JButton searchOstButton;
 
     public MainGui() {
         createGui();
