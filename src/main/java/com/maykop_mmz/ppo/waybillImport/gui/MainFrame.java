@@ -215,7 +215,6 @@ public class MainFrame extends JFrame {
                 break;
         }
 
-
         try {
             Document doc = textPane.getStyledDocument();
             doc.insertString(doc.getLength(), text + "\n", attribute);
