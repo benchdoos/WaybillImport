@@ -109,7 +109,7 @@
                 </constraints>
                 <properties>
                   <font size="26" style="1"/>
-                  <icon value="com/sun/deploy/resources/image/warning48.png"/>
+                  <icon value="img/warning48.png"/>
                   <text value="ВНИМАНИЕ!"/>
                 </properties>
               </component>

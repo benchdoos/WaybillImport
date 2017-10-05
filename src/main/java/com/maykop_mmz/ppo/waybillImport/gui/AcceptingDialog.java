@@ -78,7 +78,7 @@ public class AcceptingDialog extends JDialog {
         final JLabel label3 = new JLabel();
         Font label3Font = this.$$$getFont$$$(null, Font.BOLD, 26, label3.getFont());
         if (label3Font != null) label3.setFont(label3Font);
-        label3.setIcon(new ImageIcon(getClass().getResource("/com/sun/deploy/resources/image/warning48.png")));
+        label3.setIcon(new ImageIcon(getClass().getResource("/img/warning48.png")));
         label3.setText("ВНИМАНИЕ!");
         panel4.add(label3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label4 = new JLabel();
@@ -162,7 +162,7 @@ public class AcceptingDialog extends JDialog {
         datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
         datePicker.setTextEditable(true);
         datePicker.getModel().setDay(1);
-        datePicker.getModel().setMonth(0);
+        datePicker.getModel().setMonth(8);
         datePicker.getModel().setYear(1917);
     }
 
