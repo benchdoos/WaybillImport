@@ -1,6 +1,6 @@
 package com.maykop_mmz.ppo.waybillImport.core;
 
-import com.maykop_mmz.ppo.waybillImport.gui.MainGui;
+import com.maykop_mmz.ppo.waybillImport.gui.MainFrame;
 import com.maykop_mmz.ppo.waybillImport.utils.Logging;
 import com.maykop_mmz.ppo.waybillImport.utils.PropertiesUtils;
 import org.apache.log4j.Logger;
@@ -16,7 +16,7 @@ public class Main {
 
         enableLookAndFeel();
 
-        MainGui gui = new MainGui();
+        MainFrame gui = new MainFrame();
         gui.setVisible(true);
     }
 
