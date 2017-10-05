@@ -332,6 +332,7 @@ public class MainFrame extends JFrame {
         // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         pack();
+        setMinimumSize(getSize());
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
     }
 
@@ -401,7 +402,7 @@ public class MainFrame extends JFrame {
             addInfoToTextPane("Не удалось скопировать " + oldFile + " в "
                     + newFile, Level.WARN);
         }
-        oldFile = rash1DbfTextField.getText();
+        oldFile = rash3DbfTextField.getText();
         try {
             addInfoToTextPane("Создаем копию " + oldFile, Level.INFO);
             makeDBCopies(oldFile, path);
