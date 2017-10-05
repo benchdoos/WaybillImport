@@ -180,7 +180,6 @@ public class MainFrame extends JFrame {
     private void addInfoToTextPane(String text, Level level) {
         Style style;
         StyleContext sc = new StyleContext();
-        style = sc.addStyle("Heading2", null);
 
         MutableAttributeSet black = new SimpleAttributeSet();
         MutableAttributeSet red = new SimpleAttributeSet();
@@ -196,19 +195,23 @@ public class MainFrame extends JFrame {
             case INFO:
                 attribute = black;
                 statusLabel.setText(text);
+                text = "i> " + text;
                 break;
             case WARN:
                 attribute = red;
-                //style.addAttribute(StyleConstants.Foreground, Color.red);
+//                style.addAttribute(StyleConstants.Foreground, Color.red);
                 statusLabel.setText("<html><font color='red'>" + text + "</font></html>");
+                text = "!> " + text;
                 break;
             case SUCCESS:
                 attribute = green;
 //                style.addAttribute(StyleConstants.Foreground, DEFAULT_GREEN_COLOR);
                 statusLabel.setText("<html><font color='green'>" + text + "</font></html>");
+                text = "+> " + text;
                 break;
             default:
                 attribute = black;
+                text = "i> " + text;
                 break;
         }
 
