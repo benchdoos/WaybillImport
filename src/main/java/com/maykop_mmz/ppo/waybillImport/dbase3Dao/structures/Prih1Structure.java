@@ -17,6 +17,8 @@ public class Prih1Structure {
     private int kolIndex;
     private File file;
 
+    public Prih1Structure(){}
+
     public Prih1Structure(int manIndex, int kodIndex, int datIndex, int kolIndex,File file) {
         this.manIndex = manIndex;
         this.kodIndex = kodIndex;
@@ -29,12 +31,20 @@ public class Prih1Structure {
         return datIndex;
     }
 
+    public File getFile() {
+        return file;
+    }
+
     public void setDatIndex(int datIndex) {
         this.datIndex = datIndex;
     }
 
     public int getKodIndex() {
         return kodIndex;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
     }
 
     public void setKodIndex(int kodIndex) {
