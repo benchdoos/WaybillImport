@@ -16,6 +16,8 @@ import com.maykop_mmz.ppo.waybillImport.utils.PropertiesUtils;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -426,6 +428,22 @@ public class MainFrame extends JFrame {
 
         textPane.setEditorKit(JEditorPane.createEditorKitForContentType("text/html"));
         textPane.setEditable(false);
+        textPane.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                textPane.setCaretPosition(textPane.getDocument().getLength());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                textPane.setCaretPosition(textPane.getDocument().getLength());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                textPane.setCaretPosition(textPane.getDocument().getLength());
+            }
+        });
 
         statusLabel.setMinimumSize(new Dimension(200, -1));
         statusLabel.setPreferredSize(new Dimension(200, -1));

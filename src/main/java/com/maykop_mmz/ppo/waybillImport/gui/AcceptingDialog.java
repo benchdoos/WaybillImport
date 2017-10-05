@@ -27,57 +27,7 @@ public class AcceptingDialog extends JDialog {
 
     public AcceptingDialog() {
         $$$setupUI$$$();
-        setContentPane(contentPane);
-        setModal(true);
-        getRootPane().setDefaultButton(buttonOK);
-
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
-
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
-
-        // call onCancel() when cross is clicked
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                onCancel();
-            }
-        });
-
-        // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-        pack();
-        setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
-    }
-
-    /**
-     * @noinspection ALL
-     */
-    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
-        if (currentFont == null) return null;
-        String resultName;
-        if (fontName == null) {
-            resultName = currentFont.getName();
-        } else {
-            Font testFont = new Font(fontName, Font.PLAIN, 10);
-            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
-                resultName = fontName;
-            } else {
-                resultName = currentFont.getName();
-            }
-        }
-        return new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+        createGui();
     }
 
     /**
@@ -146,29 +96,60 @@ public class AcceptingDialog extends JDialog {
         return contentPane;
     }
 
-    private void onCancel() {
-        // add your code here if necessary
-        dispose();
+    private void createGui() {
+        setContentPane(contentPane);
+        setTitle("Выбор даты и подтверждение");
+        setIconImage(Toolkit.getDefaultToolkit().getImage(AcceptingDialog.class.getResource("/img/logo.png")));
+        setModal(true);
+        getRootPane().setDefaultButton(buttonOK);
+
+        buttonOK.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onOK();
+            }
+        });
+
+        buttonCancel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onCancel();
+            }
+        });
+
+        // call onCancel() when cross is clicked
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                onCancel();
+            }
+        });
+
+        // call onCancel() on ESCAPE
+        contentPane.registerKeyboardAction(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onCancel();
+            }
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        pack();
+        setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
     }
 
-    private void onOK() {
-        // add your code here
-        result = true;
-        dispose();
-    }
-
-    public boolean result() {
-        return result;
-    }
-
-    public Date getSelectedDate() {
-        Date result = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-        String date = sdf.format(new Date());
-
-
-        result = (Date) datePicker.getModel().getValue();
-        return result;
+    /**
+     * @noinspection ALL
+     */
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+        if (currentFont == null) return null;
+        String resultName;
+        if (fontName == null) {
+            resultName = currentFont.getName();
+        } else {
+            Font testFont = new Font(fontName, Font.PLAIN, 10);
+            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+                resultName = fontName;
+            } else {
+                resultName = currentFont.getName();
+            }
+        }
+        return new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
     }
 
     private void createUIComponents() {
@@ -183,6 +164,29 @@ public class AcceptingDialog extends JDialog {
         datePicker.getModel().setDay(1);
         datePicker.getModel().setMonth(0);
         datePicker.getModel().setYear(1917);
+    }
+
+    public Date getSelectedDate() {
+        Date result = (Date) datePicker.getModel().getValue();
+        return result;
+    }
+
+    private void onCancel() {
+        // add your code here if necessary
+        dispose();
+    }
+
+    private void onOK() {
+        if (datePicker.getModel().isSelected()) {
+            result = true;
+            dispose();
+        } else {
+            FrameUtils.shakeFrame(this);
+        }
+    }
+
+    public boolean result() {
+        return result;
     }
 
     class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
