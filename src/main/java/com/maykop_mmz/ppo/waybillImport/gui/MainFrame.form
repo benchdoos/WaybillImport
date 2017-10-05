@@ -3,7 +3,7 @@
   <grid id="cbd77" binding="contentPane" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="48" y="54" width="486" height="290"/>
+      <xy x="48" y="54" width="478" height="327"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -75,182 +75,197 @@
           </grid>
         </children>
       </grid>
-      <grid id="e3588" layout-manager="GridLayoutManager" row-count="8" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-        <margin top="0" left="0" bottom="0" right="0"/>
+      <tabbedpane id="6519f" binding="tabbedPane1" default-binding="true">
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="200" height="200"/>
+          </grid>
         </constraints>
         <properties/>
         <border type="none"/>
         <children>
-          <component id="112c8" class="javax.swing.JTextField" binding="ostDbfTextField">
+          <grid id="e921d" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="-1"/>
-              </grid>
+              <tabbedpane title="Главная"/>
             </constraints>
             <properties/>
-          </component>
-          <hspacer id="a7500">
-            <constraints>
-              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-          </hspacer>
-          <vspacer id="b3521">
-            <constraints>
-              <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-            </constraints>
-          </vspacer>
-          <component id="7477b" class="javax.swing.JLabel" binding="ostLabel">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <labelFor value="112c8"/>
-              <text value="База остатков (ost.dbf)"/>
-            </properties>
-          </component>
-          <component id="4866d" class="javax.swing.JTextField" binding="prih1DbfTextField">
-            <constraints>
-              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="-1"/>
-              </grid>
-            </constraints>
-            <properties/>
-          </component>
-          <component id="ab98d" class="javax.swing.JLabel" binding="prih1Label">
-            <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <labelFor value="4866d"/>
-              <text value="База прихода СЗ (prih1.dbf)"/>
-            </properties>
-          </component>
-          <component id="b55f8" class="javax.swing.JTextField" binding="rash1DbfTextField">
-            <constraints>
-              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="-1"/>
-              </grid>
-            </constraints>
-            <properties/>
-          </component>
-          <component id="3bda" class="javax.swing.JLabel" binding="rash1Label">
-            <constraints>
-              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <labelFor value="b55f8"/>
-              <text value="База расхода СЗ (rash1.dbf)"/>
-            </properties>
-          </component>
-          <component id="ac092" class="javax.swing.JTextField" binding="prih3DbfTextField">
-            <constraints>
-              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="-1"/>
-              </grid>
-            </constraints>
-            <properties/>
-          </component>
-          <component id="94f91" class="javax.swing.JTextField" binding="rash3DbfTextField">
-            <constraints>
-              <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="-1"/>
-              </grid>
-            </constraints>
-            <properties/>
-          </component>
-          <component id="e5ee4" class="javax.swing.JLabel" binding="prih3Label">
-            <constraints>
-              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <labelFor value="ac092"/>
-              <text value="База прихода СГ (prih3.dbf)"/>
-            </properties>
-          </component>
-          <component id="6916d" class="javax.swing.JLabel" binding="rash3Label">
-            <constraints>
-              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <labelFor value="94f91"/>
-              <text value="База расхода СГ (rash3.dbf)"/>
-            </properties>
-          </component>
-          <component id="8f5bf" class="javax.swing.JButton" binding="ostSearchButton">
-            <constraints>
-              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Обзор"/>
-            </properties>
-          </component>
-          <component id="e8d15" class="javax.swing.JButton" binding="prih1SearchButton">
-            <constraints>
-              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Обзор"/>
-            </properties>
-          </component>
-          <component id="44e1e" class="javax.swing.JButton" binding="rash1SearchButton">
-            <constraints>
-              <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Обзор"/>
-            </properties>
-          </component>
-          <component id="57b1c" class="javax.swing.JButton" binding="prih3SearchButton">
-            <constraints>
-              <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Обзор"/>
-            </properties>
-          </component>
-          <component id="32af6" class="javax.swing.JButton" binding="rash3SearchButton">
-            <constraints>
-              <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Обзор"/>
-            </properties>
-          </component>
-          <scrollpane id="e2fa8" binding="scrollPane">
-            <constraints>
-              <grid row="6" column="0" row-span="2" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties/>
-            <clientProperties>
-              <html.disable class="java.lang.Boolean" value="false"/>
-            </clientProperties>
             <border type="none"/>
             <children>
-              <component id="f8546" class="javax.swing.JTextPane" binding="textPane">
-                <constraints/>
+              <grid id="e41b8" layout-manager="GridLayoutManager" row-count="5" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
                 <properties>
-                  <contentType value="text/html"/>
+                  <name value="Hello"/>
                 </properties>
-              </component>
+                <border type="none"/>
+                <children>
+                  <component id="7477b" class="javax.swing.JLabel" binding="ostLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <labelFor value="112c8"/>
+                      <text value="База остатков (ost.dbf)"/>
+                    </properties>
+                  </component>
+                  <component id="112c8" class="javax.swing.JTextField" binding="ostDbfTextField">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="8f5bf" class="javax.swing.JButton" binding="ostSearchButton">
+                    <constraints>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Обзор"/>
+                    </properties>
+                  </component>
+                  <component id="ab98d" class="javax.swing.JLabel" binding="prih1Label">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <labelFor value="4866d"/>
+                      <text value="База прихода СЗ (prih1.dbf)"/>
+                    </properties>
+                  </component>
+                  <component id="4866d" class="javax.swing.JTextField" binding="prih1DbfTextField">
+                    <constraints>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="e8d15" class="javax.swing.JButton" binding="prih1SearchButton">
+                    <constraints>
+                      <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Обзор"/>
+                    </properties>
+                  </component>
+                  <component id="3bda" class="javax.swing.JLabel" binding="rash1Label">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <labelFor value="b55f8"/>
+                      <text value="База расхода СЗ (rash1.dbf)"/>
+                    </properties>
+                  </component>
+                  <component id="b55f8" class="javax.swing.JTextField" binding="rash1DbfTextField">
+                    <constraints>
+                      <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="44e1e" class="javax.swing.JButton" binding="rash1SearchButton">
+                    <constraints>
+                      <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Обзор"/>
+                    </properties>
+                  </component>
+                  <component id="e5ee4" class="javax.swing.JLabel" binding="prih3Label">
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <labelFor value="ac092"/>
+                      <text value="База прихода СГ (prih3.dbf)"/>
+                    </properties>
+                  </component>
+                  <component id="ac092" class="javax.swing.JTextField" binding="prih3DbfTextField">
+                    <constraints>
+                      <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="57b1c" class="javax.swing.JButton" binding="prih3SearchButton">
+                    <constraints>
+                      <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Обзор"/>
+                    </properties>
+                  </component>
+                  <component id="6916d" class="javax.swing.JLabel" binding="rash3Label">
+                    <constraints>
+                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <labelFor value="94f91"/>
+                      <text value="База расхода СГ (rash3.dbf)"/>
+                    </properties>
+                  </component>
+                  <component id="94f91" class="javax.swing.JTextField" binding="rash3DbfTextField">
+                    <constraints>
+                      <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="32af6" class="javax.swing.JButton" binding="rash3SearchButton">
+                    <constraints>
+                      <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Обзор"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <vspacer id="ec947">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
             </children>
-          </scrollpane>
-          <component id="71ac3" class="javax.swing.JButton" binding="moreInfoButton">
+          </grid>
+          <grid id="e3588" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
-              <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <tabbedpane title="Процесс"/>
             </constraints>
-            <properties>
-              <text value="Подробнее"/>
-            </properties>
-          </component>
-          <vspacer id="ff3cf">
-            <constraints>
-              <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-            </constraints>
-          </vspacer>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <scrollpane id="e2fa8" binding="scrollPane">
+                <constraints>
+                  <grid row="0" column="0" row-span="2" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <clientProperties>
+                  <html.disable class="java.lang.Boolean" value="false"/>
+                </clientProperties>
+                <border type="none"/>
+                <children>
+                  <component id="f8546" class="javax.swing.JTextPane" binding="textPane">
+                    <constraints/>
+                    <properties>
+                      <contentType value="text/html"/>
+                    </properties>
+                  </component>
+                </children>
+              </scrollpane>
+            </children>
+          </grid>
         </children>
-      </grid>
+      </tabbedpane>
     </children>
   </grid>
 </form>
