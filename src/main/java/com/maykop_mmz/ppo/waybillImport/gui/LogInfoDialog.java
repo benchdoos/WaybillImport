@@ -3,8 +3,13 @@ package com.maykop_mmz.ppo.waybillImport.gui;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import com.maykop_mmz.ppo.waybillImport.utils.Logging;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Element;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -12,11 +17,23 @@ public class LogInfoDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JTextPane textPane;
+    Logger log = Logger.getLogger(Logging.getCurrentClassName());
+
 
     public LogInfoDialog(JTextPane pane) {
         $$$setupUI$$$();
-        textPane.setStyledDocument(pane.getStyledDocument()); //Fixme
         createGui();
+
+        Element element;
+        for (int i = 0; i < pane.getStyledDocument().getLength(); i++) {
+            element = pane.getStyledDocument().getCharacterElement(i);
+            AttributeSet attributeNew = element.getAttributes();
+            try {
+                textPane.getStyledDocument().insertString(textPane.getStyledDocument().getLength(), pane.getStyledDocument().getText(i, 1), attributeNew);
+            } catch (BadLocationException e) {
+                log.warn("Can not create document", e);
+            }
+        }
     }
 
     /**
@@ -48,6 +65,7 @@ public class LogInfoDialog extends JDialog {
         final JScrollPane scrollPane2 = new JScrollPane();
         scrollPane1.setViewportView(scrollPane2);
         textPane = new JTextPane();
+        textPane.setEditable(false);
         scrollPane2.setViewportView(textPane);
     }
 

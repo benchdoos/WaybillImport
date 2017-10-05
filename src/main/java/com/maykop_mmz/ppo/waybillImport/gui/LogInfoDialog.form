@@ -63,7 +63,9 @@
                 <children>
                   <component id="b3e16" class="javax.swing.JTextPane" binding="textPane">
                     <constraints/>
-                    <properties/>
+                    <properties>
+                      <editable value="false"/>
+                    </properties>
                   </component>
                 </children>
               </scrollpane>

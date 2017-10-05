@@ -181,28 +181,44 @@ public class MainFrame extends JFrame {
         Style style;
         StyleContext sc = new StyleContext();
         style = sc.addStyle("Heading2", null);
+
+        MutableAttributeSet black = new SimpleAttributeSet();
+        MutableAttributeSet red = new SimpleAttributeSet();
+        MutableAttributeSet green = new SimpleAttributeSet();
+
+        StyleConstants.setForeground(black, Color.black);
+        StyleConstants.setForeground(red, Color.red);
+        StyleConstants.setForeground(green, DEFAULT_GREEN_COLOR);
+
+        AttributeSet attribute;
+
         switch (level) {
             case INFO:
+                attribute = black;
                 statusLabel.setText(text);
                 break;
             case WARN:
-                style.addAttribute(StyleConstants.Foreground, Color.red);
+                attribute = red;
+                //style.addAttribute(StyleConstants.Foreground, Color.red);
                 statusLabel.setText("<html><font color='red'>" + text + "</font></html>");
                 break;
             case SUCCESS:
-                style.addAttribute(StyleConstants.Foreground, DEFAULT_GREEN_COLOR);
+                attribute = green;
+//                style.addAttribute(StyleConstants.Foreground, DEFAULT_GREEN_COLOR);
                 statusLabel.setText("<html><font color='green'>" + text + "</font></html>");
                 break;
             default:
+                attribute = black;
                 break;
         }
 
 
         try {
             Document doc = textPane.getStyledDocument();
-            doc.insertString(doc.getLength(), text + "\n", style);
-        } catch (BadLocationException exc) {
-            exc.printStackTrace();
+            doc.insertString(doc.getLength(), text + "\n", attribute);
+//            doc.insertString(doc.getLength(), text + "\n", style);
+        } catch (BadLocationException e) {
+            log.warn("Could not add line to document", e);
         }
     }
 
