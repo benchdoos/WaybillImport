@@ -29,6 +29,7 @@ public class OstStructure {
         this.pzIndex = pzIndex;
         this.manIndex = manIndex;
         this.kodIndex = kodIndex;
+        this.file = file;
     }
 
     public File getFile() {

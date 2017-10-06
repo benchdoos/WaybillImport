@@ -9,11 +9,13 @@ import com.linuxense.javadbf.DBFUtils;
 import com.maykop_mmz.ppo.waybillImport.core.ApplicationConstants;
 import com.maykop_mmz.ppo.waybillImport.core.Main;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.DBase3Dao;
+import com.maykop_mmz.ppo.waybillImport.dbase3Dao.OstDetailPosition;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.Stores;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.atom.ManipulatorIndex;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.atom.OstDBValues;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.structures.ConsumptionWaybillStructure;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.structures.IncomingWaybillStructure;
+import com.maykop_mmz.ppo.waybillImport.dbase3Dao.structures.OstStructure;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.types.ConsumptionWaybillRecord;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.types.IncomingWaybillRecord;
 import com.maykop_mmz.ppo.waybillImport.utils.FrameUtils;
@@ -41,9 +43,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 import static com.maykop_mmz.ppo.waybillImport.dbase3Dao.DBase3Dao.manipulatorIndexHashMap;
 
@@ -93,6 +93,60 @@ public class MainFrame extends JFrame {
         Path source = Paths.get(sourcePath);
         Path target = Paths.get(targetPath);
         Files.copy(source, target);
+    }
+
+    private static ArrayList<OstDetailPosition> getRecordsList(HashMap<ManipulatorIndex, OstDBValues> map, OstStructure structure) throws IOException {
+        ArrayList<OstDetailPosition> details;
+
+        details = importSearchingDetails(map);
+
+
+        DBFReader reader = null;
+        try {
+            reader = new DBFReader(new FileInputStream(structure.getFile()), Charset.forName(DBase3Dao.DEFAULT_DBF_CHARSET));
+            Object[] rowObjects;
+
+            System.out.println("map size: " + map.size());
+
+            for (int i = 0; i < reader.getRecordCount(); i++) {
+                rowObjects = reader.nextRecord();
+
+                String serial = (String) rowObjects[structure.getManIndex()];
+                String code = (String) rowObjects[structure.getKodIndex()];
+                ManipulatorIndex index = new ManipulatorIndex(serial, code);
+
+                if (map.containsKey(index)) {
+                    for (int j = 0; j < details.size(); j++) {
+                        OstDetailPosition detail = details.get(j);
+                        if (detail.getIndex().equals(index)) {
+                            detail.addRecordId(i);
+                        }
+                        details.set(j, detail);
+
+                    }
+                }
+            }
+            return details;
+        } catch (DBFException | IOException e) {
+            throw new IOException("Can not read information from prih1 dbf", e);
+        } finally {
+            DBFUtils.close(reader);
+        }
+    }
+
+    private static ArrayList<OstDetailPosition> importSearchingDetails(HashMap<ManipulatorIndex, OstDBValues> map) {
+        ArrayList<OstDetailPosition> list = new ArrayList<>();
+
+        Iterator it = map.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            OstDetailPosition position = new OstDetailPosition();
+            position.setIndex((ManipulatorIndex) pair.getKey());
+            list.add(position);
+            //it.remove(); // avoids a ConcurrentModificationException
+        }
+        return list;
     }
 
     /**
@@ -454,6 +508,15 @@ public class MainFrame extends JFrame {
         rash3DbfTextField.setCaretPosition(rash3DbfTextField.getText().length());
     }
 
+    private ArrayList<OstDetailPosition> findRecords(OstStructure ostStructure, HashMap<ManipulatorIndex, OstDBValues> manipulatorIndexHashMap) throws IOException {
+        log.info("Starting collecting all records");
+        pushInfoToTextPane("Начинаем готовить список записей, которые нужно изменить в файле остатков.", Level.INFO);
+        pushInfoToTextPane("Количество записей, которые нужно найти: " + manipulatorIndexHashMap.size(), Level.INFO);
+        ArrayList result = getRecordsList(manipulatorIndexHashMap, ostStructure);
+        System.out.println(">+" + result);
+        return result;
+    }
+
     private void importPrih1(IncomingWaybillStructure prih1Structure, Date date) throws IOException {
         log.info("Starting import prih1 since date: " + date);
         pushInfoToTextPane("Начинаем составлять списки изменений для прихода СЗ начиная с " + date, Level.INFO);
@@ -781,37 +844,37 @@ public class MainFrame extends JFrame {
 
     private void startImport(final Date date) {
         setEnabledUIElements(false);
-        Runnable runnable = new Runnable() {
-            public void run() {
+        Runnable runnable = () -> {
+            try {
                 try {
-                    try {
-                        importPrih1(DBase3Dao.getPrih1Structure(), date);
-                        pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
+                    importPrih1(DBase3Dao.getPrih1Structure(), date);
+                    pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
 
-                        importRash1(DBase3Dao.getRash1Structure(), date);
-                        pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
+                    importRash1(DBase3Dao.getRash1Structure(), date);
+                    pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
 
-                        importPrih3(DBase3Dao.getPrih3Structure(), date);
-                        pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
+                    importPrih3(DBase3Dao.getPrih3Structure(), date);
+                    pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
 
-                        importRash3(DBase3Dao.getRash3Structure(), date);
-                        pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
+                    importRash3(DBase3Dao.getRash3Structure(), date);
+                    pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
 
-                        DBase3Dao.printMap(DBase3Dao.manipulatorIndexHashMap);
+                    ArrayList<OstDetailPosition> list = findRecords(DBase3Dao.getOstStructure(), DBase3Dao.manipulatorIndexHashMap);
 
-                    } catch (IOException e) {
-                        log.error("Can not load incoming waybills to stock of blanks (prih1)", e);
-                        pushInfoToTextPane("Не удалось импортировать приход склада заготовок (prih1)", Level.WARN);
-                        throw new IOException(e);
-                    }
-                } catch (IOException e1) {
-                    log.error("Could not load some waybills, rolling back all operations");//TODO restore prev. dbfs
-                    pushInfoToTextPane(
-                            "Не удалось загрузить 1 или более типа накладных " +
-                                    "в базу остатков. Откат всех операций.", Level.WARN);
+
+
+                } catch (IOException e) {
+                    log.error("Can not load incoming waybills to stock of blanks (prih1)", e);
+                    pushInfoToTextPane("Не удалось импортировать приход склада заготовок (prih1)", Level.WARN);
+                    throw new IOException(e);
                 }
-                setEnabledUIElements(true);
+            } catch (IOException e1) {
+                log.error("Could not load some waybills, rolling back all operations");//TODO restore prev. dbfs
+                pushInfoToTextPane(
+                        "Не удалось загрузить 1 или более типа накладных " +
+                                "в базу остатков. Откат всех операций.", Level.WARN);
             }
+            setEnabledUIElements(true);
         };
         SwingUtilities.invokeLater(runnable);
 

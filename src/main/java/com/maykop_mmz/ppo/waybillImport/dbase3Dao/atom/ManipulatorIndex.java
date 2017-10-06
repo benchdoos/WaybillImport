@@ -46,8 +46,7 @@ public class ManipulatorIndex {
         final int prime = getClass().hashCode();
         int result = 1;
         result = prime * result + ((serial == null) ? 0 : serial.hashCode());
-        result = prime * result +
-                ((code == null) ? 0 : code.hashCode());
+        result = prime * result + ((code == null) ? 0 : code.hashCode());
         return result;
     }
 
