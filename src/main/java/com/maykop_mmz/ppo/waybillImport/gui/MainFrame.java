@@ -478,6 +478,30 @@ public class MainFrame extends JFrame {
         pushInfoToTextPane("Все ок.", Level.SUCCESS);
     }
 
+    private void importPrih3(IncomingWaybillStructure prih3Structure, Date date) throws IOException {
+        log.info("Starting import prih3 since date: " + date);
+        pushInfoToTextPane("Начинаем составлять списки изменений для прихода СГ начиная с " + date, Level.INFO);
+        ArrayList<IncomingWaybillRecord> prih1List = DBase3Dao.getIncomingWaybillsAfterDateArrayList(prih3Structure, date);
+        log.debug("prih3 suitable waybills count: " + prih1List.size());
+        pushInfoToTextPane("Необходимо произвести изменения по " + prih1List.size() + " записям", Level.INFO);
+        for (IncomingWaybillRecord record : prih1List) {
+            ManipulatorIndex manipulatorIndex = record.getManipulatorIndex();
+
+            OstDBValues values = new OstDBValues(new BigDecimal(0), new BigDecimal(-record.getCount().intValue()),
+                    record.getCount(), new BigDecimal(0));
+
+            if (manipulatorIndexHashMap.containsKey(manipulatorIndex)) {
+                OstDBValues summed = manipulatorIndexHashMap.get(manipulatorIndex).add(values);
+                manipulatorIndexHashMap.put(manipulatorIndex, summed);
+            } else {
+                manipulatorIndexHashMap.put(manipulatorIndex, values);
+            }
+        }
+        //DBase3Dao.printMap(manipulatorIndexHashMap);
+        log.info("Checked records: " + prih1List.size());
+        pushInfoToTextPane("Все ок.", Level.SUCCESS);
+    }
+
     private void importRash1(ConsumptionWaybillStructure rash1Structure, Date date) throws IOException {
         log.info("Starting import rash1 since date: " + date);
         pushInfoToTextPane("Начинаем составлять списки изменений для расхода СЗ начиная с " + date, Level.INFO);
@@ -493,6 +517,39 @@ public class MainFrame extends JFrame {
             } else if (record.getStore() == Stores.PZ1) {
                 values = new OstDBValues(new BigDecimal(-record.getCount().intValue()), new BigDecimal(0),
                         new BigDecimal(0), record.getCount());
+            } else {
+                log.warn("Can not parse record: " + record);
+            }
+
+            if (values != null) {
+                if (manipulatorIndexHashMap.containsKey(manipulatorIndex)) {
+                    OstDBValues summed = manipulatorIndexHashMap.get(manipulatorIndex).add(values);
+                    manipulatorIndexHashMap.put(manipulatorIndex, summed);
+                } else {
+                    manipulatorIndexHashMap.put(manipulatorIndex, values);
+                }
+            }
+        }
+        //DBase3Dao.printMap(manipulatorIndexHashMap);
+        log.info("Checked records: " + rash1List.size());
+        pushInfoToTextPane("Все ок.", Level.SUCCESS);
+    }
+
+    private void importRash3(ConsumptionWaybillStructure rash3Structure, Date date) throws IOException {
+        log.info("Starting import rash3 since date: " + date);
+        pushInfoToTextPane("Начинаем составлять списки изменений для расхода СГ начиная с " + date, Level.INFO);
+        ArrayList<ConsumptionWaybillRecord> rash1List = DBase3Dao.getConsumptionWaybillAfterDateArrayList(rash3Structure, date);
+        log.debug("prih1 suitable waybills count: " + rash1List.size());
+        pushInfoToTextPane("Необходимо произвести изменения по " + rash1List.size() + " записям", Level.INFO);
+        for (ConsumptionWaybillRecord record : rash1List) {
+            ManipulatorIndex manipulatorIndex = record.getManipulatorIndex();
+            OstDBValues values = null;
+            if (record.getStore() == Stores.MZ1) {
+                values = new OstDBValues(new BigDecimal(0), record.getCount(),
+                        new BigDecimal(-record.getCount().intValue()), new BigDecimal(0));
+            } else if (record.getStore() == Stores.PZ1) {
+                values = new OstDBValues(new BigDecimal(0), new BigDecimal(0),
+                        new BigDecimal(-record.getCount().intValue()), record.getCount());
             } else {
                 log.warn("Can not parse record: " + record);
             }
@@ -722,27 +779,42 @@ public class MainFrame extends JFrame {
         }
     }
 
-    private void startImport(Date date) {
-        try {
-            setEnabledUIElements(false);
-            try {
-                importPrih1(DBase3Dao.getPrih1Structure(), date);
-                pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
-                importRash1(DBase3Dao.getRash1Structure(), date);
-                pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
-                setEnabledUIElements(true);
+    private void startImport(final Date date) {
+        setEnabledUIElements(false);
+        Runnable runnable = new Runnable() {
+            public void run() {
+                try {
+                    try {
+                        importPrih1(DBase3Dao.getPrih1Structure(), date);
+                        pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
 
-            } catch (IOException e) {
-                log.error("Can not load incoming waybills to stock of blanks (prih1)", e);
-                pushInfoToTextPane("Не удалось импортировать приход склада заготовок (prih1)", Level.WARN);
-                throw new IOException(e);
+                        importRash1(DBase3Dao.getRash1Structure(), date);
+                        pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
+
+                        importPrih3(DBase3Dao.getPrih3Structure(), date);
+                        pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
+
+                        importRash3(DBase3Dao.getRash3Structure(), date);
+                        pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
+
+                        DBase3Dao.printMap(DBase3Dao.manipulatorIndexHashMap);
+
+                    } catch (IOException e) {
+                        log.error("Can not load incoming waybills to stock of blanks (prih1)", e);
+                        pushInfoToTextPane("Не удалось импортировать приход склада заготовок (prih1)", Level.WARN);
+                        throw new IOException(e);
+                    }
+                } catch (IOException e1) {
+                    log.error("Could not load some waybills, rolling back all operations");//TODO restore prev. dbfs
+                    pushInfoToTextPane(
+                            "Не удалось загрузить 1 или более типа накладных " +
+                                    "в базу остатков. Откат всех операций.", Level.WARN);
+                }
+                setEnabledUIElements(true);
             }
-        } catch (IOException e1) {
-            log.error("Could not load some waybills, rolling back all operations");//TODO restore prev. dbfs
-            pushInfoToTextPane(
-                    "Не удалось загрузить 1 или более типа накладных " +
-                            "в базу остатков. Откат всех операций.", Level.WARN);
-        }
+        };
+        SwingUtilities.invokeLater(runnable);
+
 
     }
 
