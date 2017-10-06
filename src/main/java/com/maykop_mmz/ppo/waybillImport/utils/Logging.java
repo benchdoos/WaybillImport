@@ -9,7 +9,7 @@ import java.io.File;
  * Created by Eugene Zrazhevsky on 30.10.2016.
  */
 public class Logging {
-    public static final File LOG_FOLDER = new File(ApplicationConstants.APP_LOG_FOLDER_PATH);
+    private static final File LOG_FOLDER = new File(ApplicationConstants.APP_LOG_FOLDER_PATH);
     private String collingApp;
 
     public Logging(String collingAppName) {

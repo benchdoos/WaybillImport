@@ -48,8 +48,8 @@ import java.util.Date;
 import static com.maykop_mmz.ppo.waybillImport.dbase3Dao.DBase3Dao.manipulatorIndexHashMap;
 
 public class MainFrame extends JFrame {
-    final Color DEFAULT_GREEN_COLOR = new Color(0, 172, 0);
-    Logger log = Logger.getLogger(Logging.getCurrentClassName());
+    private final Color DEFAULT_GREEN_COLOR = new Color(0, 172, 0);
+    private Logger log = Logger.getLogger(Logging.getCurrentClassName());
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -701,13 +701,15 @@ public class MainFrame extends JFrame {
         PropertiesUtils.saveProperties();
     }
 
-    private void setBlockedUIElements(boolean block) {
-        if (block) {
+    private void setEnabledUIElements(boolean b) {
+        if (b) {
+            tabbedPane.setEnabledAt(tabbedPane.indexOfTab("Главная"), true);
+        } else {
             tabbedPane.setSelectedComponent(processTab);
-            tabbedPane.setEnabledAt(tabbedPane.indexOfTab("Главная"), !block);
-        } else tabbedPane.setEnabledAt(tabbedPane.indexOfTab("Главная"), block);
-        buttonOK.setEnabled(!block);
-        buttonCancel.setEnabled(!block);
+            tabbedPane.setEnabledAt(tabbedPane.indexOfTab("Главная"), false);
+        }
+        buttonOK.setEnabled(b);
+        buttonCancel.setEnabled(b);
     }
 
     private void startDataTransfer(AcceptingDialog acceptingDialog) {
@@ -722,12 +724,13 @@ public class MainFrame extends JFrame {
 
     private void startImport(Date date) {
         try {
-            setBlockedUIElements(true);
+            setEnabledUIElements(false);
             try {
                 importPrih1(DBase3Dao.getPrih1Structure(), date);
                 pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
                 importRash1(DBase3Dao.getRash1Structure(), date);
                 pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
+                setEnabledUIElements(true);
 
             } catch (IOException e) {
                 log.error("Can not load incoming waybills to stock of blanks (prih1)", e);
@@ -740,7 +743,6 @@ public class MainFrame extends JFrame {
                     "Не удалось загрузить 1 или более типа накладных " +
                             "в базу остатков. Откат всех операций.", Level.WARN);
         }
-        setBlockedUIElements(false);
 
     }
 

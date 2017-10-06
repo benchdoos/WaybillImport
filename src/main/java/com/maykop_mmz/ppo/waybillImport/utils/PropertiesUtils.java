@@ -11,9 +11,9 @@ import java.util.Properties;
  */
 public class PropertiesUtils {
 
-    public static Properties properties;
+    private static Properties properties;
 
-    static Logger log = Logger.getLogger(Logging.getCurrentClassName());
+    private static Logger log = Logger.getLogger(Logging.getCurrentClassName());
 
     public static void loadProperties() {
         log.debug("Loading properties from: " + ApplicationConstants.PROPERTIES_FILE_PATH);
@@ -43,7 +43,7 @@ public class PropertiesUtils {
     public static void saveProperties() {
         File file = new File(ApplicationConstants.PROPERTIES_FILE_PATH);
         try {
-            FileOutputStream fileOutputStream = null;
+            FileOutputStream fileOutputStream;
             fileOutputStream = new FileOutputStream(file);
             properties.storeToXML(fileOutputStream,"","UTF-8");
         } catch (IOException e) {

@@ -37,7 +37,7 @@ public class DBase3Dao {
         return ostStructure;
     }
 
-    public static void setOstStructure(OstStructure ostStructure) {
+    private static void setOstStructure(OstStructure ostStructure) {
         DBase3Dao.ostStructure = ostStructure;
     }
 
@@ -65,7 +65,7 @@ public class DBase3Dao {
     }
 
 
-    public static int getFieldNumberByName(DBFReader reader, String fieldName) {
+    private static int getFieldNumberByName(DBFReader reader, String fieldName) {
         fieldName = fieldName.toUpperCase();
         for (int i = 0; i < reader.getFieldCount(); i++) {
             if (reader.getField(i).getName().equals(fieldName)) {
@@ -97,8 +97,7 @@ public class DBase3Dao {
         int skIndex = getFieldNumberByName(reader, ConsumptionWaybillStructure.SK_FIELD_NAME);
         int kolIndex = getFieldNumberByName(reader, ConsumptionWaybillStructure.KOL_FIELD_NAME);
 
-        ConsumptionWaybillStructure structure = new ConsumptionWaybillStructure(manIndex, kodIndex, mesIndex, datIndex, skIndex, kolIndex, file);
-        return structure;
+        return new ConsumptionWaybillStructure(manIndex, kodIndex, mesIndex, datIndex, skIndex, kolIndex, file);
     }
 
     public static ConsumptionWaybillStructure getRash1Structure() {
@@ -188,9 +187,9 @@ public class DBase3Dao {
 
                 String dayString = (String) rowObjects[structure.getDayIndex()];
                 String monthString = (String) rowObjects[structure.getMesIndex()];
-                int day = 0;
-                int month = 0;
-                int store = 0;
+                int day;
+                int month;
+                int store;
                 try {
                     day = Integer.parseInt(dayString);
                     month = Integer.parseInt(monthString);

@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 /**
  * Created by Eugene Zrazhevsky on 006 06.10.2017.
  */
+@SuppressWarnings("WeakerAccess")
 public class OstDBValues {
     private BigDecimal sz1;
     private BigDecimal mz1;
@@ -18,6 +19,7 @@ public class OstDBValues {
         this.pz1 = pz1;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public OstDBValues() {
 
     }

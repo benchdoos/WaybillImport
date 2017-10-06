@@ -3,6 +3,7 @@ package com.maykop_mmz.ppo.waybillImport.dbase3Dao.atom;
 /**
  * Created by Eugene Zrazhevsky on 006 06.10.2017.
  */
+@SuppressWarnings("ALL")
 public class ManipulatorIndex {
     private String serial;
     private String code;
