@@ -3,9 +3,9 @@ package com.maykop_mmz.ppo.waybillImport.dbase3Dao.structures;
 import java.io.File;
 
 /**
- * Created by Eugene Zrazhevsky on 005 05.10.2017.
+ * Created by Eugene Zrazhevsky on 006 06.10.2017.
  */
-public class Prih3Structure {
+public class IncomingWaybillStructure {
     public static final String MAN_FIELD_NAME = "MAN";
     public static final String KOD_FIELD_NAME = "KOD";
     public static final String DAT_FIELD_NAME = "DAT";
@@ -17,11 +17,10 @@ public class Prih3Structure {
     private int kolIndex;
     private File file;
 
-
-    public Prih3Structure() {
+    public IncomingWaybillStructure() {
     }
 
-    public Prih3Structure(int manIndex, int kodIndex, int datIndex, int kolIndex, File file) {
+    public IncomingWaybillStructure(int manIndex, int kodIndex, int datIndex, int kolIndex, File file) {
         this.manIndex = manIndex;
         this.kodIndex = kodIndex;
         this.datIndex = datIndex;
@@ -33,20 +32,20 @@ public class Prih3Structure {
         return datIndex;
     }
 
-    public File getFile() {
-        return file;
-    }
-
     public void setDatIndex(int datIndex) {
         this.datIndex = datIndex;
     }
 
-    public int getKodIndex() {
-        return kodIndex;
+    public File getFile() {
+        return file;
     }
 
     public void setFile(File file) {
         this.file = file;
+    }
+
+    public int getKodIndex() {
+        return kodIndex;
     }
 
     public void setKodIndex(int kodIndex) {
@@ -71,7 +70,7 @@ public class Prih3Structure {
 
     @Override
     public String toString() {
-        return "Prih3Structure{" +
+        return "IncomingWaybillStructure{" +
                 MAN_FIELD_NAME + ":" + manIndex + ", " +
                 KOD_FIELD_NAME + ":" + kodIndex + ", " +
                 DAT_FIELD_NAME + ":" + datIndex + ", " +
