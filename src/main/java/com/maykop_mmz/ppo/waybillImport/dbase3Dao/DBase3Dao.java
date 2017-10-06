@@ -223,4 +223,56 @@ public class DBase3Dao {
             DBFUtils.close(reader);
         }
     }
+
+    public static ArrayList<OstDetailPosition> getRecordsList(HashMap<ManipulatorIndex, OstDBValues> map, OstStructure structure) throws IOException {
+        ArrayList<OstDetailPosition> details;
+
+        details = importSearchingDetails(map);
+
+
+        DBFReader reader = null;
+        try {
+            reader = new DBFReader(new FileInputStream(structure.getFile()), Charset.forName(DEFAULT_DBF_CHARSET));
+            Object[] rowObjects;
+
+            for (int i = 0; i < reader.getRecordCount(); i++) {
+                rowObjects = reader.nextRecord();
+
+                String serial = (String) rowObjects[structure.getManIndex()];
+                String code = (String) rowObjects[structure.getKodIndex()];
+                ManipulatorIndex index = new ManipulatorIndex(serial, code);
+
+                if (map.containsKey(index)) {
+                    for (int j = 0; j < details.size(); j++) {
+                        OstDetailPosition detail = details.get(j);
+                        if (detail.getIndex().equals(index)) {
+                            detail.addRecordId(i);
+                        }
+                        details.set(j, detail);
+
+                    }
+                }
+            }
+            return details;
+        } catch (DBFException | IOException e) {
+            throw new IOException("Can not read information from prih1 dbf", e);
+        } finally {
+            DBFUtils.close(reader);
+        }
+    }
+
+    private static ArrayList<OstDetailPosition> importSearchingDetails(HashMap<ManipulatorIndex, OstDBValues> map) {
+        ArrayList<OstDetailPosition> list = new ArrayList<>();
+
+        Iterator it = map.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            OstDetailPosition position = new OstDetailPosition();
+            position.setIndex((ManipulatorIndex) pair.getKey());
+            list.add(position);
+            //it.remove(); // avoids a ConcurrentModificationException
+        }
+        return list;
+    }
 }

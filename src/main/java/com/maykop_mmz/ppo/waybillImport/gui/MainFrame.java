@@ -43,7 +43,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 
 import static com.maykop_mmz.ppo.waybillImport.dbase3Dao.DBase3Dao.manipulatorIndexHashMap;
 
@@ -93,60 +96,6 @@ public class MainFrame extends JFrame {
         Path source = Paths.get(sourcePath);
         Path target = Paths.get(targetPath);
         Files.copy(source, target);
-    }
-
-    private static ArrayList<OstDetailPosition> getRecordsList(HashMap<ManipulatorIndex, OstDBValues> map, OstStructure structure) throws IOException {
-        ArrayList<OstDetailPosition> details;
-
-        details = importSearchingDetails(map);
-
-
-        DBFReader reader = null;
-        try {
-            reader = new DBFReader(new FileInputStream(structure.getFile()), Charset.forName(DBase3Dao.DEFAULT_DBF_CHARSET));
-            Object[] rowObjects;
-
-            System.out.println("map size: " + map.size());
-
-            for (int i = 0; i < reader.getRecordCount(); i++) {
-                rowObjects = reader.nextRecord();
-
-                String serial = (String) rowObjects[structure.getManIndex()];
-                String code = (String) rowObjects[structure.getKodIndex()];
-                ManipulatorIndex index = new ManipulatorIndex(serial, code);
-
-                if (map.containsKey(index)) {
-                    for (int j = 0; j < details.size(); j++) {
-                        OstDetailPosition detail = details.get(j);
-                        if (detail.getIndex().equals(index)) {
-                            detail.addRecordId(i);
-                        }
-                        details.set(j, detail);
-
-                    }
-                }
-            }
-            return details;
-        } catch (DBFException | IOException e) {
-            throw new IOException("Can not read information from prih1 dbf", e);
-        } finally {
-            DBFUtils.close(reader);
-        }
-    }
-
-    private static ArrayList<OstDetailPosition> importSearchingDetails(HashMap<ManipulatorIndex, OstDBValues> map) {
-        ArrayList<OstDetailPosition> list = new ArrayList<>();
-
-        Iterator it = map.entrySet().iterator();
-
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            OstDetailPosition position = new OstDetailPosition();
-            position.setIndex((ManipulatorIndex) pair.getKey());
-            list.add(position);
-            //it.remove(); // avoids a ConcurrentModificationException
-        }
-        return list;
     }
 
     /**
@@ -512,9 +461,7 @@ public class MainFrame extends JFrame {
         log.info("Starting collecting all records");
         pushInfoToTextPane("Начинаем готовить список записей, которые нужно изменить в файле остатков.", Level.INFO);
         pushInfoToTextPane("Количество записей, которые нужно найти: " + manipulatorIndexHashMap.size(), Level.INFO);
-        ArrayList result = getRecordsList(manipulatorIndexHashMap, ostStructure);
-        System.out.println(">+" + result);
-        return result;
+        return DBase3Dao.getRecordsList(manipulatorIndexHashMap, ostStructure);
     }
 
     private void importPrih1(IncomingWaybillStructure prih1Structure, Date date) throws IOException {
@@ -821,6 +768,20 @@ public class MainFrame extends JFrame {
         PropertiesUtils.saveProperties();
     }
 
+    private void scanList(ArrayList<OstDetailPosition> list) {
+        for (OstDetailPosition detail : list) {
+            if (detail.getRecordsId().size() == 0) {
+                log.warn("Could not find " +
+                        detail.getIndex() + "\t" +
+                        DBase3Dao.manipulatorIndexHashMap.get(detail.getIndex()) +
+                        " at ost db");
+                pushInfoToTextPane("Не удалось найти деталь "
+                                + detail.getIndex() + "\t" + DBase3Dao.manipulatorIndexHashMap.get(detail.getIndex()),
+                        Level.WARN);
+            }
+        }
+    }
+
     private void setEnabledUIElements(boolean b) {
         if (b) {
             tabbedPane.setEnabledAt(tabbedPane.indexOfTab("Главная"), true);
@@ -859,8 +820,9 @@ public class MainFrame extends JFrame {
                     importRash3(DBase3Dao.getRash3Structure(), date);
                     pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
 
-                    ArrayList<OstDetailPosition> list = findRecords(DBase3Dao.getOstStructure(), DBase3Dao.manipulatorIndexHashMap);
+                    final ArrayList<OstDetailPosition> list = findRecords(DBase3Dao.getOstStructure(), DBase3Dao.manipulatorIndexHashMap);
 
+                    scanList(list);
 
 
                 } catch (IOException e) {
