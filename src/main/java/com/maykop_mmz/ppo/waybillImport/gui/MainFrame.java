@@ -200,13 +200,6 @@ public class MainFrame extends JFrame {
         rash3Label.setLabelFor(rash3DbfTextField);
     }
 
-    private void blockUIElements() {
-        tabbedPane.setSelectedComponent(processTab);
-        tabbedPane.setEnabledAt(tabbedPane.indexOfTab("Главная"), false);
-        buttonOK.setEnabled(false);
-        buttonCancel.setEnabled(false);
-    }
-
     private void changeLabelColorsToDefault() {
         ostLabel.setForeground(Color.black);
         prih1Label.setForeground(Color.black);
@@ -708,6 +701,15 @@ public class MainFrame extends JFrame {
         PropertiesUtils.saveProperties();
     }
 
+    private void setBlockedUIElements(boolean block) {
+        if (block) {
+            tabbedPane.setSelectedComponent(processTab);
+            tabbedPane.setEnabledAt(tabbedPane.indexOfTab("Главная"), !block);
+        } else tabbedPane.setEnabledAt(tabbedPane.indexOfTab("Главная"), block);
+        buttonOK.setEnabled(!block);
+        buttonCancel.setEnabled(!block);
+    }
+
     private void startDataTransfer(AcceptingDialog acceptingDialog) {
         if (acceptingDialog.isDateSelected()) {
             final Date selectedDate = acceptingDialog.getSelectedDate();
@@ -720,7 +722,7 @@ public class MainFrame extends JFrame {
 
     private void startImport(Date date) {
         try {
-            //blockUIElements();//TODO return before release
+            setBlockedUIElements(true);
             try {
                 importPrih1(DBase3Dao.getPrih1Structure(), date);
                 pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
@@ -738,6 +740,8 @@ public class MainFrame extends JFrame {
                     "Не удалось загрузить 1 или более типа накладных " +
                             "в базу остатков. Откат всех операций.", Level.WARN);
         }
+        setBlockedUIElements(false);
+
     }
 
     enum Level {INFO, SUCCESS, WARN}

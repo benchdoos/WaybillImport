@@ -91,7 +91,7 @@ public class ConsumptionWaybillStructure {
 
     @Override
     public String toString() {
-        return "Rash1Structure{" +
+        return "ConsumptionWaybillStructure{" +
                 MAN_FIELD_NAME + ":" + manIndex + ", " +
                 KOD_FIELD_NAME + ":" + kodIndex + ", " +
                 MES_FIELD_NAME + ":" + mesIndex + ", " +
