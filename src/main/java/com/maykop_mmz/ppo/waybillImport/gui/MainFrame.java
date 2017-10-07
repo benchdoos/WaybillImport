@@ -47,6 +47,7 @@ import static com.maykop_mmz.ppo.waybillImport.dbase3Dao.Dbase3Dao.manipulatorIn
 
 public class MainFrame extends JFrame {
     private final Color DEFAULT_GREEN_COLOR = new Color(0, 172, 0);
+    private final Color DEFAULT_ORANGE_COLOR = new Color(235,143,0);
     private Logger log = Logger.getLogger(Logging.getCurrentClassName());
     private JPanel contentPane;
     private JButton buttonOK;
@@ -796,7 +797,7 @@ public class MainFrame extends JFrame {
         MutableAttributeSet green = new SimpleAttributeSet();
 
         StyleConstants.setForeground(black, Color.black);
-        StyleConstants.setForeground(orange, Color.orange);
+        StyleConstants.setForeground(orange, DEFAULT_ORANGE_COLOR);
         StyleConstants.setForeground(red, Color.red);
         StyleConstants.setForeground(green, DEFAULT_GREEN_COLOR);
 
@@ -811,7 +812,7 @@ public class MainFrame extends JFrame {
             case WARN:
                 attribute = orange;
 //                statusLabel.setText("<html><font color='orange'>" + text + "</font></html>");
-                statusLabel.setForeground(Color.orange);
+                statusLabel.setForeground(DEFAULT_ORANGE_COLOR);
                 statusLabel.setText(text);
                 break;
             case ERROR:
@@ -961,6 +962,7 @@ public class MainFrame extends JFrame {
 
             pushInfoToTextPane("===========================================", Level.WARN);
             pushInfoToTextPane("Импорт накладных в базу остатков успешно завершен", Level.SUCCESS);
+            log.info("Import stopped successfully!");
 
 
         } catch (IOException e1) {
