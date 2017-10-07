@@ -297,4 +297,66 @@ public class Dbase3Dao {
         }
         return v1.add(v2);
     }
+
+    public static void checkPrih1Structure(String path) {
+        log.info("Scanning structure of prih1 in: " + path);
+        DBFReader reader = null;
+        try {
+            reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
+            IncomingWaybillStructure structure = Dbase3Dao.generateIncomingWaybillStructure(reader, new File(path));
+            Dbase3Dao.setPrih1Structure(structure);
+        } catch (DBFException | IOException e) {
+            log.warn("Can not read " + path, e);
+            throw new DBFException(e);
+        } finally {
+            DBFUtils.close(reader);
+        }
+    }
+
+    public static void checkPrih3Structure(String path) {
+        log.info("Scanning structure of prih3 in: " + path);
+        DBFReader reader = null;
+        try {
+            reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
+            IncomingWaybillStructure structure = Dbase3Dao.generateIncomingWaybillStructure(reader, new File(path));
+            Dbase3Dao.setPrih3Structure(structure);
+        } catch (DBFException | IOException e) {
+            log.warn("Can not read " + path, e);
+            throw new DBFException(e);
+        } finally {
+            DBFUtils.close(reader);
+        }
+    }
+
+    public static void checkRash1Structure(String path) {
+        log.info("Scanning structure of rash1 in: " + path);
+        DBFReader reader = null;
+        try {
+            reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
+            final ConsumptionWaybillStructure structure = Dbase3Dao.generateConsumptionWaybillStructure(reader, new File(path));
+            Dbase3Dao.setRash1Structure(structure);
+
+        } catch (DBFException | IOException e) {
+            log.warn("Can not read " + path, e);
+            throw new DBFException(e);
+        } finally {
+            DBFUtils.close(reader);
+        }
+    }
+
+    public static void checkRash3Structure(String path) {
+        log.info("Scanning structure of rash3 in: " + path);
+        DBFReader reader = null;
+        try {
+            reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
+            final ConsumptionWaybillStructure structure = Dbase3Dao.generateConsumptionWaybillStructure(reader, new File(path));
+            Dbase3Dao.setRash3Structure(structure);
+
+        } catch (DBFException | IOException e) {
+            log.warn("Can not read " + path, e);
+            throw new DBFException(e);
+        } finally {
+            DBFUtils.close(reader);
+        }
+    }
 }

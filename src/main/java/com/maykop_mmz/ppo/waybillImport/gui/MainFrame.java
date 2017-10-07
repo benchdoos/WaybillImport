@@ -259,22 +259,22 @@ public class MainFrame extends JFrame {
             pushInfoToTextPane("Все ок.", Level.SUCCESS);
 
             pushInfoToTextPane("Проверяем структуру файла прихода СЗ", Level.INFO);
-            checkPrih1Structure(prih1DbfTextField.getText());
+            Dbase3Dao.checkPrih1Structure(prih1DbfTextField.getText());
             prih1Label.setForeground(DEFAULT_GREEN_COLOR);
             pushInfoToTextPane("Все ок.", Level.SUCCESS);
 
             pushInfoToTextPane("Проверяем структуру файла расхода СЗ", Level.INFO);
-            checkRash1Structure(rash1DbfTextField.getText());
+            Dbase3Dao.checkRash1Structure(rash1DbfTextField.getText());
             rash1Label.setForeground(DEFAULT_GREEN_COLOR);
             pushInfoToTextPane("Все ок.", Level.SUCCESS);
 
             pushInfoToTextPane("Проверяем структуру файла прихода СГ", Level.INFO);
-            checkPrih3Structure(prih3DbfTextField.getText());
+            Dbase3Dao.checkPrih3Structure(prih3DbfTextField.getText());
             prih3Label.setForeground(DEFAULT_GREEN_COLOR);
             pushInfoToTextPane("Все ок.", Level.SUCCESS);
 
             pushInfoToTextPane("Проверяем структуру файла расхода СГ", Level.INFO);
-            checkRash3Structure(rash3DbfTextField.getText());
+            Dbase3Dao.checkRash3Structure(rash3DbfTextField.getText());
             rash3Label.setForeground(DEFAULT_GREEN_COLOR);
             pushInfoToTextPane("Все ок.", Level.SUCCESS);
 
@@ -300,67 +300,7 @@ public class MainFrame extends JFrame {
         }
     }
 
-    private void checkPrih1Structure(String path) {
-        log.info("Scanning structure of prih1 in: " + path);
-        DBFReader reader = null;
-        try {
-            reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
-            IncomingWaybillStructure structure = Dbase3Dao.generateIncomingWaybillStructure(reader, new File(path));
-            Dbase3Dao.setPrih1Structure(structure);
-        } catch (DBFException | IOException e) {
-            log.warn("Can not read " + path, e);
-            throw new DBFException(e);
-        } finally {
-            DBFUtils.close(reader);
-        }
-    }
 
-    private void checkPrih3Structure(String path) {
-        log.info("Scanning structure of prih3 in: " + path);
-        DBFReader reader = null;
-        try {
-            reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
-            IncomingWaybillStructure structure = Dbase3Dao.generateIncomingWaybillStructure(reader, new File(path));
-            Dbase3Dao.setPrih3Structure(structure);
-        } catch (DBFException | IOException e) {
-            log.warn("Can not read " + path, e);
-            throw new DBFException(e);
-        } finally {
-            DBFUtils.close(reader);
-        }
-    }
-
-    private void checkRash1Structure(String path) {
-        log.info("Scanning structure of rash1 in: " + path);
-        DBFReader reader = null;
-        try {
-            reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
-            final ConsumptionWaybillStructure structure = Dbase3Dao.generateConsumptionWaybillStructure(reader, new File(path));
-            Dbase3Dao.setRash1Structure(structure);
-
-        } catch (DBFException | IOException e) {
-            log.warn("Can not read " + path, e);
-            throw new DBFException(e);
-        } finally {
-            DBFUtils.close(reader);
-        }
-    }
-
-    private void checkRash3Structure(String path) {
-        log.info("Scanning structure of rash3 in: " + path);
-        DBFReader reader = null;
-        try {
-            reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
-            final ConsumptionWaybillStructure structure = Dbase3Dao.generateConsumptionWaybillStructure(reader, new File(path));
-            Dbase3Dao.setRash3Structure(structure);
-
-        } catch (DBFException | IOException e) {
-            log.warn("Can not read " + path, e);
-            throw new DBFException(e);
-        } finally {
-            DBFUtils.close(reader);
-        }
-    }
 
     private void createGui() {
         setContentPane(contentPane);
