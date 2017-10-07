@@ -266,10 +266,8 @@ public class Dbase3Dao {
     private static ArrayList<OstDetailPosition> importSearchingDetails(HashMap<ManipulatorIndex, OstDBValues> map) {
         ArrayList<OstDetailPosition> list = new ArrayList<>();
 
-        Iterator it = map.entrySet().iterator();
-
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
+        for (Object o : map.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
             OstDetailPosition position = new OstDetailPosition();
             position.setIndex((ManipulatorIndex) pair.getKey());
             list.add(position);
