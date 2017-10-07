@@ -26,14 +26,13 @@ import java.util.*;
 public class Dbase3Dao {
     public static final String DEFAULT_DBF_CHARSET = "cp866";
     public static final HashMap<ManipulatorIndex, OstDBValues> manipulatorIndexHashMap = new HashMap<>();
+    public static File backupFolder;
     private static OstStructure ostStructure;
     private static IncomingWaybillStructure prih1Structure;
     private static ConsumptionWaybillStructure rash1Structure;
     private static Logger log = Logger.getLogger(Logging.getCurrentClassName());
     private static IncomingWaybillStructure prih3Structure;
     private static ConsumptionWaybillStructure rash3Structure;
-
-    public static File backupFolder;
 
     public static OstStructure getOstStructure() {
         return ostStructure;
@@ -194,7 +193,7 @@ public class Dbase3Dao {
                 int store;
                 try {
                     day = Integer.parseInt(dayString);
-                    month = Integer.parseInt(monthString);
+                    month = Integer.parseInt(monthString)- 1;//in java first month is 0, in dbfs - 1
 
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(date);
