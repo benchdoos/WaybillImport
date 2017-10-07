@@ -193,7 +193,7 @@ public class Dbase3Dao {
                 int store;
                 try {
                     day = Integer.parseInt(dayString);
-                    month = Integer.parseInt(monthString)- 1;//in java first month is 0, in dbfs - 1
+                    month = Integer.parseInt(monthString) - 1;//in java first month is 0, in dbfs - 1
 
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(date);
