@@ -33,6 +33,8 @@ public class Dbase3Dao {
     private static IncomingWaybillStructure prih3Structure;
     private static ConsumptionWaybillStructure rash3Structure;
 
+    public static File backupFolder;
+
     public static OstStructure getOstStructure() {
         return ostStructure;
     }
