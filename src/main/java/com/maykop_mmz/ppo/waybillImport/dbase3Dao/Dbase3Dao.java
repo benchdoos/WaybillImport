@@ -23,7 +23,7 @@ import java.util.*;
 /**
  * Created by Eugene Zrazhevsky on 005 05.10.2017.
  */
-public class DBase3Dao {
+public class Dbase3Dao {
     public static final String DEFAULT_DBF_CHARSET = "cp866";
     public static final HashMap<ManipulatorIndex, OstDBValues> manipulatorIndexHashMap = new HashMap<>();
     private static OstStructure ostStructure;
@@ -38,7 +38,7 @@ public class DBase3Dao {
     }
 
     private static void setOstStructure(OstStructure ostStructure) {
-        DBase3Dao.ostStructure = ostStructure;
+        Dbase3Dao.ostStructure = ostStructure;
     }
 
     public static IncomingWaybillStructure getPrih1Structure() {
@@ -46,7 +46,7 @@ public class DBase3Dao {
     }
 
     public static void setPrih1Structure(IncomingWaybillStructure prih1Structure) {
-        DBase3Dao.prih1Structure = prih1Structure;
+        Dbase3Dao.prih1Structure = prih1Structure;
     }
 
     public static void generateOstStructure(DBFReader reader, File file) {
@@ -61,7 +61,7 @@ public class DBase3Dao {
 
         OstStructure structure = new OstStructure(szIndex, mzIndex, sgIndex, pzIndex, manIndex, kodIndex, file);
         log.info("Checked structure ost: " + structure);
-        DBase3Dao.setOstStructure(structure);
+        Dbase3Dao.setOstStructure(structure);
     }
 
 
@@ -105,7 +105,7 @@ public class DBase3Dao {
     }
 
     public static void setRash1Structure(ConsumptionWaybillStructure rash1Structure) {
-        DBase3Dao.rash1Structure = rash1Structure;
+        Dbase3Dao.rash1Structure = rash1Structure;
     }
 
     public static IncomingWaybillStructure getPrih3Structure() {
@@ -113,7 +113,7 @@ public class DBase3Dao {
     }
 
     public static void setPrih3Structure(IncomingWaybillStructure prih3Structure) {
-        DBase3Dao.prih3Structure = prih3Structure;
+        Dbase3Dao.prih3Structure = prih3Structure;
     }
 
     public static ConsumptionWaybillStructure getRash3Structure() {
@@ -121,7 +121,7 @@ public class DBase3Dao {
     }
 
     public static void setRash3Structure(ConsumptionWaybillStructure rash3Structure) {
-        DBase3Dao.rash3Structure = rash3Structure;
+        Dbase3Dao.rash3Structure = rash3Structure;
     }
 
     public static void printMap(Map mp) {
@@ -137,7 +137,7 @@ public class DBase3Dao {
         ArrayList<IncomingWaybillRecord> prih1List = new ArrayList<>();
         DBFReader reader = null;
         try {
-            reader = new DBFReader(new FileInputStream(structure.getFile()), Charset.forName(DBase3Dao.DEFAULT_DBF_CHARSET));
+            reader = new DBFReader(new FileInputStream(structure.getFile()), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
             Object[] rowObjects;
 
             for (int i = 0; i < reader.getRecordCount(); i++) {
@@ -172,7 +172,7 @@ public class DBase3Dao {
         ArrayList<ConsumptionWaybillRecord> consumptionList = new ArrayList<>();
         DBFReader reader = null;
         try {
-            reader = new DBFReader(new FileInputStream(structure.getFile()), Charset.forName(DBase3Dao.DEFAULT_DBF_CHARSET));
+            reader = new DBFReader(new FileInputStream(structure.getFile()), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
             Object[] rowObjects;
 
             for (int i = 0; i < reader.getRecordCount(); i++) {
@@ -274,5 +274,28 @@ public class DBase3Dao {
             //it.remove(); // avoids a ConcurrentModificationException
         }
         return list;
+    }
+
+    public static ArrayList<Integer> getFullListRecordIds(ArrayList<OstDetailPosition> ostDetailPositions) {
+        ArrayList<Integer> result = new ArrayList<>();
+        for (OstDetailPosition detailPosition : ostDetailPositions) {
+            final ArrayList<Integer> recordsIdList = detailPosition.getRecordsId();
+            if (recordsIdList.size() > 0) {
+                result.addAll(recordsIdList);
+            }
+        }
+
+        return result;
+    }
+
+    public static Object sumValues(BigDecimal v1, BigDecimal v2) {
+        if (v1 == null) {
+            v1 = new BigDecimal(0);
+        }
+
+        if (v2 == null) {
+            v2 = new BigDecimal(0);
+        }
+        return v1.add(v2);
     }
 }

@@ -3,12 +3,10 @@ package com.maykop_mmz.ppo.waybillImport.gui;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import com.linuxense.javadbf.DBFException;
-import com.linuxense.javadbf.DBFReader;
-import com.linuxense.javadbf.DBFUtils;
+import com.linuxense.javadbf.*;
 import com.maykop_mmz.ppo.waybillImport.core.ApplicationConstants;
 import com.maykop_mmz.ppo.waybillImport.core.Main;
-import com.maykop_mmz.ppo.waybillImport.dbase3Dao.DBase3Dao;
+import com.maykop_mmz.ppo.waybillImport.dbase3Dao.Dbase3Dao;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.OstDetailPosition;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.Stores;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.atom.ManipulatorIndex;
@@ -48,7 +46,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
-import static com.maykop_mmz.ppo.waybillImport.dbase3Dao.DBase3Dao.manipulatorIndexHashMap;
+import static com.maykop_mmz.ppo.waybillImport.dbase3Dao.Dbase3Dao.manipulatorIndexHashMap;
 
 public class MainFrame extends JFrame {
     private final Color DEFAULT_GREEN_COLOR = new Color(0, 172, 0);
@@ -89,7 +87,6 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         createGui();
         fillSettingsToFields();
-        pushInfoToTextPane("Логирование в " + System.getProperty(ApplicationConstants.APP_LOG_PROPERTY), Level.INFO);
     }
 
     private static void copyFile(String sourcePath, String targetPath) throws IOException {
@@ -203,6 +200,12 @@ public class MainFrame extends JFrame {
         rash3Label.setLabelFor(rash3DbfTextField);
     }
 
+    private DBFWriter applyFieldsIfNewFile(OstStructure structure, DBFWriter writer, DBFField[] fields) {
+        if (!structure.getFile().exists()) {
+        }
+        return writer;
+    }
+
     private void changeLabelColorsToDefault() {
         ostLabel.setForeground(Color.black);
         prih1Label.setForeground(Color.black);
@@ -284,8 +287,8 @@ public class MainFrame extends JFrame {
         log.info("Scanning structure of ost in: " + path);
         DBFReader reader = null;
         try {
-            reader = new DBFReader(new FileInputStream(path), Charset.forName(DBase3Dao.DEFAULT_DBF_CHARSET));
-            DBase3Dao.generateOstStructure(reader, new File(path));
+            reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
+            Dbase3Dao.generateOstStructure(reader, new File(path));
         } catch (DBFException | IOException e) {
             log.warn("Can not read " + path, e);
             throw new DBFException(e);
@@ -298,9 +301,9 @@ public class MainFrame extends JFrame {
         log.info("Scanning structure of prih1 in: " + path);
         DBFReader reader = null;
         try {
-            reader = new DBFReader(new FileInputStream(path), Charset.forName(DBase3Dao.DEFAULT_DBF_CHARSET));
-            IncomingWaybillStructure structure = DBase3Dao.generateIncomingWaybillStructure(reader, new File(path));
-            DBase3Dao.setPrih1Structure(structure);
+            reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
+            IncomingWaybillStructure structure = Dbase3Dao.generateIncomingWaybillStructure(reader, new File(path));
+            Dbase3Dao.setPrih1Structure(structure);
         } catch (DBFException | IOException e) {
             log.warn("Can not read " + path, e);
             throw new DBFException(e);
@@ -313,9 +316,9 @@ public class MainFrame extends JFrame {
         log.info("Scanning structure of prih3 in: " + path);
         DBFReader reader = null;
         try {
-            reader = new DBFReader(new FileInputStream(path), Charset.forName(DBase3Dao.DEFAULT_DBF_CHARSET));
-            IncomingWaybillStructure structure = DBase3Dao.generateIncomingWaybillStructure(reader, new File(path));
-            DBase3Dao.setPrih3Structure(structure);
+            reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
+            IncomingWaybillStructure structure = Dbase3Dao.generateIncomingWaybillStructure(reader, new File(path));
+            Dbase3Dao.setPrih3Structure(structure);
         } catch (DBFException | IOException e) {
             log.warn("Can not read " + path, e);
             throw new DBFException(e);
@@ -328,9 +331,9 @@ public class MainFrame extends JFrame {
         log.info("Scanning structure of rash1 in: " + path);
         DBFReader reader = null;
         try {
-            reader = new DBFReader(new FileInputStream(path), Charset.forName(DBase3Dao.DEFAULT_DBF_CHARSET));
-            final ConsumptionWaybillStructure structure = DBase3Dao.generateConsumptionWaybillStructure(reader, new File(path));
-            DBase3Dao.setRash1Structure(structure);
+            reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
+            final ConsumptionWaybillStructure structure = Dbase3Dao.generateConsumptionWaybillStructure(reader, new File(path));
+            Dbase3Dao.setRash1Structure(structure);
 
         } catch (DBFException | IOException e) {
             log.warn("Can not read " + path, e);
@@ -344,9 +347,9 @@ public class MainFrame extends JFrame {
         log.info("Scanning structure of rash3 in: " + path);
         DBFReader reader = null;
         try {
-            reader = new DBFReader(new FileInputStream(path), Charset.forName(DBase3Dao.DEFAULT_DBF_CHARSET));
-            final ConsumptionWaybillStructure structure = DBase3Dao.generateConsumptionWaybillStructure(reader, new File(path));
-            DBase3Dao.setRash3Structure(structure);
+            reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
+            final ConsumptionWaybillStructure structure = Dbase3Dao.generateConsumptionWaybillStructure(reader, new File(path));
+            Dbase3Dao.setRash3Structure(structure);
 
         } catch (DBFException | IOException e) {
             log.warn("Can not read " + path, e);
@@ -439,6 +442,65 @@ public class MainFrame extends JFrame {
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
     }
 
+    private void exportListToOst(ArrayList<OstDetailPosition> ostDetailPositions, HashMap<ManipulatorIndex, OstDBValues> manipulatorIndexHashMap, OstStructure structure) {
+
+        try {
+            DBFReader reader = new DBFReader(new FileInputStream(structure.getFile()), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
+            final String pathname = structure.getFile().getParent() + File.separator + "OST_.dbf";
+            new File(pathname).delete();
+            DBFWriter writer = new DBFWriter(new File(pathname), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
+
+            DBFField[] fields = generateFields(reader);
+
+            writer = applyFieldsIfNewFile(structure, writer, fields);
+
+            try {
+                writer.setFields(fields);
+            } catch (DBFException e) {
+                log.debug("Fields already exist, nevermind", e);
+            }
+
+
+            ArrayList<Integer> searchingRecordIdsArrayList = Dbase3Dao.getFullListRecordIds(ostDetailPositions);
+
+            for (int i = 0; i < reader.getRecordCount(); i++) {
+                Object record[] = reader.nextRecord();
+                if (searchingRecordIdsArrayList.contains(i)) {
+                    ManipulatorIndex current = new ManipulatorIndex((String) record[structure.getManIndex()], (String) record[structure.getKodIndex()]);
+                    if (manipulatorIndexHashMap.containsKey(current)) {
+                        OstDBValues values = manipulatorIndexHashMap.get(current);
+                        Object[] customRecord = new Object[reader.getFieldCount()];
+                        for (int j = 0; j < reader.getFieldCount(); j++) {
+                            if (j == structure.getSzIndex()) {
+                                customRecord[j] = Dbase3Dao.sumValues((BigDecimal) record[j], values.getSz1());
+                            } else if (j == structure.getMzIndex()) {
+                                customRecord[j] = Dbase3Dao.sumValues((BigDecimal) record[j], values.getMz1());
+                            } else if (j == structure.getSgIndex()) {
+                                customRecord[j] = Dbase3Dao.sumValues((BigDecimal) record[j], values.getSg1());
+                            } else if (j == structure.getPzIndex()) {
+                                customRecord[j] = Dbase3Dao.sumValues((BigDecimal) record[j], values.getPz1());
+                            } else {
+                                customRecord[j] = record[j];
+                            }
+                        }
+                        writer.addRecord(customRecord);
+                        pushInfoToTextPane("Успешно добавлена деталь " + current + "\t" + values + "\tНа строке: " + i, Level.SUCCESS);
+                        log.info("Successfully added detail " + current + " " + values + " on id: " + i);
+                    } else {
+                        log.warn("Detail discrepancy. Wanted: " + current + " on id:" + i);
+                        pushInfoToTextPane("Несоответсвие деталей, что-то пошло не так... Ожидалась" + current + " на id: " + i, Level.WARN);
+                    }
+                } else {
+                    writer.addRecord(record);
+                }
+            }
+            reader.close();
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void fillSettingsToFields() {
         log.info("Loading settings to panel");
         ostDbfTextField.setText(PropertiesUtils.getProperty(PropertiesNames.OST_DBF_NAME));
@@ -461,15 +523,26 @@ public class MainFrame extends JFrame {
         log.info("Starting collecting all records");
         pushInfoToTextPane("Начинаем готовить список записей, которые нужно изменить в файле остатков.", Level.INFO);
         pushInfoToTextPane("Количество записей, которые нужно найти: " + manipulatorIndexHashMap.size(), Level.INFO);
-        return DBase3Dao.getRecordsList(manipulatorIndexHashMap, ostStructure);
+        return Dbase3Dao.getRecordsList(manipulatorIndexHashMap, ostStructure);
     }
 
-    private void importPrih1(IncomingWaybillStructure prih1Structure, Date date) throws IOException {
+    private DBFField[] generateFields(DBFReader reader) {
+        DBFField[] fields = new DBFField[reader.getFieldCount()];
+
+
+        for (int i = 0; i < reader.getFieldCount(); i++) {
+            fields[i] = reader.getField(i);
+        }
+        return fields;
+    }
+
+    private void importPrih1(IncomingWaybillStructure prih1Structure, final Date date) throws IOException {
         log.info("Starting import prih1 since date: " + date);
         pushInfoToTextPane("Начинаем составлять списки изменений для прихода СЗ начиная с " + date, Level.INFO);
-        ArrayList<IncomingWaybillRecord> prih1List = DBase3Dao.getIncomingWaybillsAfterDateArrayList(prih1Structure, date);
+        final ArrayList<IncomingWaybillRecord> prih1List = Dbase3Dao.getIncomingWaybillsAfterDateArrayList(prih1Structure, date);
         log.debug("prih1 suitable waybills count: " + prih1List.size());
         pushInfoToTextPane("Необходимо произвести изменения по " + prih1List.size() + " записям", Level.INFO);
+
         for (IncomingWaybillRecord record : prih1List) {
             ManipulatorIndex manipulatorIndex = record.getManipulatorIndex();
 
@@ -483,6 +556,7 @@ public class MainFrame extends JFrame {
                 manipulatorIndexHashMap.put(manipulatorIndex, values);
             }
         }
+
         //DBase3Dao.printMap(manipulatorIndexHashMap);
         log.info("Checked records: " + prih1List.size());
         pushInfoToTextPane("Все ок.", Level.SUCCESS);
@@ -491,7 +565,7 @@ public class MainFrame extends JFrame {
     private void importPrih3(IncomingWaybillStructure prih3Structure, Date date) throws IOException {
         log.info("Starting import prih3 since date: " + date);
         pushInfoToTextPane("Начинаем составлять списки изменений для прихода СГ начиная с " + date, Level.INFO);
-        ArrayList<IncomingWaybillRecord> prih1List = DBase3Dao.getIncomingWaybillsAfterDateArrayList(prih3Structure, date);
+        ArrayList<IncomingWaybillRecord> prih1List = Dbase3Dao.getIncomingWaybillsAfterDateArrayList(prih3Structure, date);
         log.debug("prih3 suitable waybills count: " + prih1List.size());
         pushInfoToTextPane("Необходимо произвести изменения по " + prih1List.size() + " записям", Level.INFO);
         for (IncomingWaybillRecord record : prih1List) {
@@ -507,7 +581,7 @@ public class MainFrame extends JFrame {
                 manipulatorIndexHashMap.put(manipulatorIndex, values);
             }
         }
-        //DBase3Dao.printMap(manipulatorIndexHashMap);
+        //Dbase3Dao.printMap(manipulatorIndexHashMap);
         log.info("Checked records: " + prih1List.size());
         pushInfoToTextPane("Все ок.", Level.SUCCESS);
     }
@@ -515,7 +589,7 @@ public class MainFrame extends JFrame {
     private void importRash1(ConsumptionWaybillStructure rash1Structure, Date date) throws IOException {
         log.info("Starting import rash1 since date: " + date);
         pushInfoToTextPane("Начинаем составлять списки изменений для расхода СЗ начиная с " + date, Level.INFO);
-        ArrayList<ConsumptionWaybillRecord> rash1List = DBase3Dao.getConsumptionWaybillAfterDateArrayList(rash1Structure, date);
+        ArrayList<ConsumptionWaybillRecord> rash1List = Dbase3Dao.getConsumptionWaybillAfterDateArrayList(rash1Structure, date);
         log.debug("prih1 suitable waybills count: " + rash1List.size());
         pushInfoToTextPane("Необходимо произвести изменения по " + rash1List.size() + " записям", Level.INFO);
         for (ConsumptionWaybillRecord record : rash1List) {
@@ -540,7 +614,7 @@ public class MainFrame extends JFrame {
                 }
             }
         }
-        //DBase3Dao.printMap(manipulatorIndexHashMap);
+        //Dbase3Dao.printMap(manipulatorIndexHashMap);
         log.info("Checked records: " + rash1List.size());
         pushInfoToTextPane("Все ок.", Level.SUCCESS);
     }
@@ -548,7 +622,7 @@ public class MainFrame extends JFrame {
     private void importRash3(ConsumptionWaybillStructure rash3Structure, Date date) throws IOException {
         log.info("Starting import rash3 since date: " + date);
         pushInfoToTextPane("Начинаем составлять списки изменений для расхода СГ начиная с " + date, Level.INFO);
-        ArrayList<ConsumptionWaybillRecord> rash1List = DBase3Dao.getConsumptionWaybillAfterDateArrayList(rash3Structure, date);
+        ArrayList<ConsumptionWaybillRecord> rash1List = Dbase3Dao.getConsumptionWaybillAfterDateArrayList(rash3Structure, date);
         log.debug("prih1 suitable waybills count: " + rash1List.size());
         pushInfoToTextPane("Необходимо произвести изменения по " + rash1List.size() + " записям", Level.INFO);
         for (ConsumptionWaybillRecord record : rash1List) {
@@ -573,7 +647,7 @@ public class MainFrame extends JFrame {
                 }
             }
         }
-        //DBase3Dao.printMap(manipulatorIndexHashMap);
+        //Dbase3Dao.printMap(manipulatorIndexHashMap);
         log.info("Checked records: " + rash1List.size());
         pushInfoToTextPane("Все ок.", Level.SUCCESS);
     }
@@ -682,14 +756,14 @@ public class MainFrame extends JFrame {
                 filesChecked = false;
             }
         } else {
-            AcceptingDialog acceptingDialog = new AcceptingDialog();
+            final AcceptingDialog acceptingDialog = new AcceptingDialog();
             acceptingDialog.setVisible(true);
             final boolean result = acceptingDialog.result();
             log.info("Accepted: " + result);
             if (result) {
                 makeBackup();
                 pushInfoToTextPane("===========================================", Level.SUCCESS);
-                startDataTransfer(acceptingDialog);
+                SwingUtilities.invokeLater(() -> startDataTransfer(acceptingDialog));
             }
         }
     }
@@ -715,7 +789,7 @@ public class MainFrame extends JFrame {
         }
     }
 
-    private void pushInfoToTextPane(String text, Level level) {
+    private void pushInfoToTextPane(final String text, final Level level) {
         Style style;
         StyleContext sc = new StyleContext();
 
@@ -736,12 +810,12 @@ public class MainFrame extends JFrame {
                 break;
             case WARN:
                 attribute = red;
-//                style.addAttribute(StyleConstants.Foreground, Color.red);
+                //                style.addAttribute(StyleConstants.Foreground, Color.red);
                 statusLabel.setText("<html><font color='red'>" + text + "</font></html>");
                 break;
             case SUCCESS:
                 attribute = green;
-//                style.addAttribute(StyleConstants.Foreground, DEFAULT_GREEN_COLOR);
+                //                style.addAttribute(StyleConstants.Foreground, DEFAULT_GREEN_COLOR);
                 statusLabel.setText("<html><font color='green'>" + text + "</font></html>");
                 break;
             default:
@@ -749,13 +823,15 @@ public class MainFrame extends JFrame {
                 break;
         }
 
-        try {
-            Document doc = textPane.getStyledDocument();
-            doc.insertString(doc.getLength(), text + "\n", attribute);
-//            doc.insertString(doc.getLength(), text + "\n", style);
-        } catch (BadLocationException e) {
-            log.warn("Could not add line to document", e);
-        }
+        Runnable runnable = () -> {
+            try {
+                Document doc = textPane.getStyledDocument();
+                doc.insertString(doc.getLength(), text + "\n", attribute);
+            } catch (BadLocationException e) {
+                log.warn("Could not add line to document", e);
+            }
+        };
+        SwingUtilities.invokeLater(runnable);
     }
 
     private void saveSettings() {
@@ -773,10 +849,10 @@ public class MainFrame extends JFrame {
             if (detail.getRecordsId().size() == 0) {
                 log.warn("Could not find " +
                         detail.getIndex() + "\t" +
-                        DBase3Dao.manipulatorIndexHashMap.get(detail.getIndex()) +
+                        Dbase3Dao.manipulatorIndexHashMap.get(detail.getIndex()) +
                         " at ost db");
                 pushInfoToTextPane("Не удалось найти деталь "
-                                + detail.getIndex() + "\t" + DBase3Dao.manipulatorIndexHashMap.get(detail.getIndex()),
+                                + detail.getIndex() + "\t" + Dbase3Dao.manipulatorIndexHashMap.get(detail.getIndex()),
                         Level.WARN);
             }
         }
@@ -793,55 +869,74 @@ public class MainFrame extends JFrame {
         buttonCancel.setEnabled(b);
     }
 
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        pushInfoToTextPane("Логирование в " + System.getProperty(ApplicationConstants.APP_LOG_PROPERTY), Level.INFO);
+    }
+
     private void startDataTransfer(AcceptingDialog acceptingDialog) {
         if (acceptingDialog.isDateSelected()) {
             final Date selectedDate = acceptingDialog.getSelectedDate();
             log.info("Selected date from: " + selectedDate);
-            startImport(selectedDate);
+            setEnabledUIElements(false);
+
+            new Thread(new ThreadDispatcher(selectedDate)).start();
+
         } else {
             pushInfoToTextPane("Дата, с которой нужно добавлять накладные - не указана", Level.WARN);
         }
     }
 
     private void startImport(final Date date) {
-        setEnabledUIElements(false);
-        Runnable runnable = () -> {
+        try {
             try {
-                try {
-                    importPrih1(DBase3Dao.getPrih1Structure(), date);
-                    pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
+                importPrih1(Dbase3Dao.getPrih1Structure(), date);
+                pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
 
-                    importRash1(DBase3Dao.getRash1Structure(), date);
-                    pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
+                importRash1(Dbase3Dao.getRash1Structure(), date);
+                pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
 
-                    importPrih3(DBase3Dao.getPrih3Structure(), date);
-                    pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
+                importPrih3(Dbase3Dao.getPrih3Structure(), date);
+                pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
 
-                    importRash3(DBase3Dao.getRash3Structure(), date);
-                    pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
+                importRash3(Dbase3Dao.getRash3Structure(), date);
+                pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
 
-                    final ArrayList<OstDetailPosition> list = findRecords(DBase3Dao.getOstStructure(), DBase3Dao.manipulatorIndexHashMap);
+                final ArrayList<OstDetailPosition> list = findRecords(Dbase3Dao.getOstStructure(), Dbase3Dao.manipulatorIndexHashMap);
 
-                    scanList(list);
+                scanList(list);
+
+                exportListToOst(list, Dbase3Dao.manipulatorIndexHashMap, Dbase3Dao.getOstStructure());
 
 
-                } catch (IOException e) {
-                    log.error("Can not load incoming waybills to stock of blanks (prih1)", e);
-                    pushInfoToTextPane("Не удалось импортировать приход склада заготовок (prih1)", Level.WARN);
-                    throw new IOException(e);
-                }
-            } catch (IOException e1) {
-                log.error("Could not load some waybills, rolling back all operations");//TODO restore prev. dbfs
-                pushInfoToTextPane(
-                        "Не удалось загрузить 1 или более типа накладных " +
-                                "в базу остатков. Откат всех операций.", Level.WARN);
+            } catch (IOException e) {
+                log.error("Can not load incoming waybills to stock of blanks (prih1)", e);
+                pushInfoToTextPane("Не удалось импортировать приход склада заготовок (prih1)", Level.WARN);
+                throw new IOException(e);
             }
-            setEnabledUIElements(true);
-        };
-        SwingUtilities.invokeLater(runnable);
+        } catch (IOException e1) {
+            log.error("Could not load some waybills, rolling back all operations");//TODO restore prev. dbfs
+            pushInfoToTextPane(
+                    "Не удалось загрузить 1 или более типа накладных " +
+                            "в базу остатков. Откат всех операций.", Level.WARN);
+        }
 
-
+        setEnabledUIElements(true);
     }
 
     enum Level {INFO, SUCCESS, WARN}
+
+    class ThreadDispatcher implements Runnable {
+        private Date date;
+
+        public ThreadDispatcher(Date date) {
+            this.date = date;
+        }
+
+        public void run() {
+            startImport(date);
+        }
+
+    }
 }
