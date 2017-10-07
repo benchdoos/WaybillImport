@@ -33,9 +33,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -85,12 +82,6 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         createGui();
         fillSettingsToFields();
-    }
-
-    private static void copyFile(String sourcePath, String targetPath) throws IOException {
-        Path source = Paths.get(sourcePath);
-        Path target = Paths.get(targetPath);
-        Files.copy(source, target);
     }
 
     /**
@@ -209,6 +200,20 @@ public class MainFrame extends JFrame {
         return writer;
     }
 
+    private void backupFile(File file, File path) {
+        try {
+            pushInfoToTextPane("Создаем копию " + file + " в " + path, Level.INFO);
+            FileUtils.copyFile(file, path);
+            pushInfoToTextPane("Все ок.", Level.SUCCESS);
+        } catch (IOException e) {
+            final String newFile = ApplicationConstants.APP_BACKUP_FOLDER + file.getName();
+
+            log.warn("Could not copy file " + file + " to " + newFile);
+            pushInfoToTextPane("Не удалось скопировать " + file + " в "
+                    + newFile, Level.ERROR);
+        }
+    }
+
     private void changeLabelColorsToDefault() {
         ostLabel.setForeground(Color.black);
         prih1Label.setForeground(Color.black);
@@ -299,8 +304,6 @@ public class MainFrame extends JFrame {
             DBFUtils.close(reader);
         }
     }
-
-
 
     private void createGui() {
         setContentPane(contentPane);
@@ -622,78 +625,20 @@ public class MainFrame extends JFrame {
 
 
         String oldFile = ostDbfTextField.getText();
-        try {
-            pushInfoToTextPane("Создаем копию " + oldFile, Level.INFO);
-            makeDBCopies(oldFile, path);
-            pushInfoToTextPane("Все ок.", Level.SUCCESS);
-        } catch (IOException e) {
-            final String newFile = ApplicationConstants.APP_BACKUP_FOLDER + new File(oldFile).getName();
-
-            log.warn("Could not copy file " + oldFile + " to " + newFile);
-            pushInfoToTextPane("Не удалось скопировать " + oldFile + " в "
-                    + newFile, Level.ERROR);
-        }
+        backupFile(new File(oldFile), Dbase3Dao.backupFolder);
 
         oldFile = prih1DbfTextField.getText();
-        try {
-            pushInfoToTextPane("Создаем копию " + oldFile, Level.INFO);
-            makeDBCopies(oldFile, path);
-            pushInfoToTextPane("Все ок.", Level.SUCCESS);
-        } catch (IOException e) {
-            final String newFile = ApplicationConstants.APP_BACKUP_FOLDER + new File(oldFile).getName();
-            pushInfoToTextPane("Не удалось скопировать " + oldFile + " в "
-                    + newFile, Level.ERROR);
-        }
+        backupFile(new File(oldFile), Dbase3Dao.backupFolder);
 
         oldFile = rash1DbfTextField.getText();
-        try {
-            pushInfoToTextPane("Создаем копию " + oldFile, Level.INFO);
-            makeDBCopies(oldFile, path);
-            pushInfoToTextPane("Все ок.", Level.SUCCESS);
-        } catch (IOException e) {
-            final String newFile = ApplicationConstants.APP_BACKUP_FOLDER + new File(oldFile).getName();
-            pushInfoToTextPane("Не удалось скопировать " + oldFile + " в "
-                    + newFile, Level.ERROR);
-        }
+        backupFile(new File(oldFile), Dbase3Dao.backupFolder);
+
 
         oldFile = prih3DbfTextField.getText();
-        try {
-            pushInfoToTextPane("Создаем копию " + oldFile, Level.INFO);
-            makeDBCopies(oldFile, path);
-            pushInfoToTextPane("Все ок.", Level.SUCCESS);
-        } catch (IOException e) {
-            final String newFile = ApplicationConstants.APP_BACKUP_FOLDER + new File(oldFile).getName();
-            pushInfoToTextPane("Не удалось скопировать " + oldFile + " в "
-                    + newFile, Level.ERROR);
-        }
+        backupFile(new File(oldFile), Dbase3Dao.backupFolder);
+
         oldFile = rash3DbfTextField.getText();
-        try {
-            pushInfoToTextPane("Создаем копию " + oldFile, Level.INFO);
-            makeDBCopies(oldFile, path);
-            pushInfoToTextPane("Все ок.", Level.SUCCESS);
-        } catch (IOException e) {
-            final String newFile = ApplicationConstants.APP_BACKUP_FOLDER + new File(oldFile).getName();
-            pushInfoToTextPane("Не удалось скопировать " + oldFile + " в "
-                    + newFile, Level.ERROR);
-        }
-    }
-
-    private void makeDBCopies(String sourcePath, String targetFolder) throws IOException {
-        File folder = new File(targetFolder);
-        pushInfoToTextPane("Делаем копии в " + folder.getPath(), Level.INFO);
-
-        String targetPath = folder.getAbsolutePath() + File.separator + new File(sourcePath).getName();
-
-        File targetFile = new File(targetPath);
-
-        if (!folder.exists()) {
-            if (folder.mkdirs()) {
-                copyFile(sourcePath, targetFile.getPath());
-            }
-
-        } else {
-            copyFile(sourcePath, targetFile.getPath());
-        }
+        backupFile(new File(oldFile), Dbase3Dao.backupFolder);
     }
 
     private void onCancel() {
