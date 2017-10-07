@@ -47,7 +47,7 @@ import static com.maykop_mmz.ppo.waybillImport.dbase3Dao.Dbase3Dao.manipulatorIn
 
 public class MainFrame extends JFrame {
     private final Color DEFAULT_GREEN_COLOR = new Color(0, 172, 0);
-    private final Color DEFAULT_ORANGE_COLOR = new Color(235,143,0);
+    private final Color DEFAULT_ORANGE_COLOR = new Color(235, 143, 0);
     private Logger log = Logger.getLogger(Logging.getCurrentClassName());
     private JPanel contentPane;
     private JButton buttonOK;
@@ -196,6 +196,11 @@ public class MainFrame extends JFrame {
         rash1Label.setLabelFor(rash1DbfTextField);
         prih3Label.setLabelFor(prih3DbfTextField);
         rash3Label.setLabelFor(rash3DbfTextField);
+    }
+
+    private void annulFileCheck() {
+        filesChecked = false;
+        buttonOK.setText("OK");
     }
 
     private DBFWriter applyFieldsIfNewFile(OstStructure structure, DBFWriter writer, DBFField[] fields) {
@@ -370,19 +375,40 @@ public class MainFrame extends JFrame {
 
         buttonCancel.addActionListener(e -> onCancel());
 
+        DocumentListener documentListener = new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                annulFileCheck();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                annulFileCheck();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                annulFileCheck();
+            }
+        };
+
+        ostDbfTextField.getDocument().addDocumentListener(documentListener);
+        prih1DbfTextField.getDocument().addDocumentListener(documentListener);
+        rash1DbfTextField.getDocument().addDocumentListener(documentListener);
+        prih3DbfTextField.getDocument().addDocumentListener(documentListener);
+        rash3DbfTextField.getDocument().addDocumentListener(documentListener);
+
         ostSearchButton.addActionListener(e -> {
             String path = openFileBrowser();
             if (path != null)
                 ostDbfTextField.setText(path);
         });
-
         prih1SearchButton.addActionListener(e -> {
             String path = openFileBrowser();
             if (path != null) {
                 prih1DbfTextField.setText(path);
             }
         });
-
         rash1SearchButton.addActionListener(e -> {
             String path = openFileBrowser();
             if (path != null) {
@@ -751,6 +777,9 @@ public class MainFrame extends JFrame {
                 pushInfoToTextPane("Не удалось загрузить файл" + e.getMessage(), Level.ERROR);
                 filesChecked = false;
             }
+            if (filesChecked) {
+                buttonOK.setText("Начать");
+            }
         } else {
             final AcceptingDialog acceptingDialog = new AcceptingDialog();
             acceptingDialog.setVisible(true);
@@ -811,19 +840,16 @@ public class MainFrame extends JFrame {
                 break;
             case WARN:
                 attribute = orange;
-//                statusLabel.setText("<html><font color='orange'>" + text + "</font></html>");
                 statusLabel.setForeground(DEFAULT_ORANGE_COLOR);
                 statusLabel.setText(text);
                 break;
             case ERROR:
                 attribute = red;
-//                statusLabel.setText("<html><font color='red'>" + text + "</font></html>");
                 statusLabel.setForeground(Color.red);
                 statusLabel.setText(text);
                 break;
             case SUCCESS:
                 attribute = green;
-//                statusLabel.setText("<html><font color='green'>" + text + "</font></html>");
                 statusLabel.setForeground(DEFAULT_GREEN_COLOR);
                 statusLabel.setText(text);
                 break;
