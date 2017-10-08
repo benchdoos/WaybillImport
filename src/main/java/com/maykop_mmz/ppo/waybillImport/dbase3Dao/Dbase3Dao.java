@@ -172,6 +172,8 @@ public class Dbase3Dao {
             reader = new DBFReader(new FileInputStream(structure.getFile()), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
             Object[] rowObjects;
 
+            Date lastWaybillDate = date;
+
             for (int i = 0; i < reader.getRecordCount(); i++) {
                 rowObjects = reader.nextRecord();
 
@@ -186,8 +188,13 @@ public class Dbase3Dao {
                 waybillRecord.setCount((BigDecimal) rowObjects[structure.getKolIndex()]);
 
                 if (date != null && waybillRecord.getDate() != null) {
-                    if (waybillRecord.getDate() == date || waybillRecord.getDate().after(date)) {
+                    if (waybillRecord.getDate().equals(date) || waybillRecord.getDate().after(date)) {
                         prih1List.add(waybillRecord);
+
+                        if (!lastWaybillDate.equals(waybillRecord.getDate())) {
+                            lastWaybillDate = waybillRecord.getDate();
+                            log.info("Added incoming waybill by date: " + lastWaybillDate);
+                        }
                     }
                 }
             }
@@ -199,13 +206,15 @@ public class Dbase3Dao {
         }
     }
 
-    public static ArrayList<ConsumptionWaybillRecord> getConsumptionWaybillAfterDateArrayList(
+    public static ArrayList<ConsumptionWaybillRecord> getConsumptionWaybillsAfterDateArrayList(
             ConsumptionWaybillStructure structure, Date date) throws IOException {
         ArrayList<ConsumptionWaybillRecord> consumptionList = new ArrayList<>();
         DBFReader reader = null;
         try {
             reader = new DBFReader(new FileInputStream(structure.getFile()), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
             Object[] rowObjects;
+
+            Date lastWaybillDate = date;
 
             for (int i = 0; i < reader.getRecordCount(); i++) {
                 rowObjects = reader.nextRecord();
@@ -240,8 +249,13 @@ public class Dbase3Dao {
                     waybillRecord.setCount((BigDecimal) rowObjects[structure.getKolIndex()]);
 
                     if (waybillRecord.getDate() != null) {
-                        if (waybillRecord.getDate() == date || waybillRecord.getDate().after(date)) {
+                        if (waybillRecord.getDate().equals(date) || waybillRecord.getDate().after(date)) {
                             consumptionList.add(waybillRecord);
+
+                            if (!lastWaybillDate.equals(waybillRecord.getDate())) {
+                                lastWaybillDate = waybillRecord.getDate();
+                                log.info("Added incoming waybill by date: " + lastWaybillDate);
+                            }
                         }
                     }
                 } catch (NumberFormatException e) {
