@@ -5,7 +5,6 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import com.linuxense.javadbf.*;
 import com.maykop_mmz.ppo.waybillImport.core.ApplicationConstants;
-import com.maykop_mmz.ppo.waybillImport.core.Main;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.Dbase3Dao;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.OstDetailPosition;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.Stores;
@@ -343,30 +342,30 @@ public class MainFrame extends JFrame {
         rash3DbfTextField.getDocument().addDocumentListener(documentListener);
 
         ostSearchButton.addActionListener(e -> {
-            String path = openFileBrowser();
+            String path = FileUtils.openFileBrowser(this);
             if (path != null)
                 ostDbfTextField.setText(path);
         });
         prih1SearchButton.addActionListener(e -> {
-            String path = openFileBrowser();
+            String path = FileUtils.openFileBrowser(this);
             if (path != null) {
                 prih1DbfTextField.setText(path);
             }
         });
         rash1SearchButton.addActionListener(e -> {
-            String path = openFileBrowser();
+            String path = FileUtils.openFileBrowser(this);
             if (path != null) {
                 rash1DbfTextField.setText(path);
             }
         });
         prih3SearchButton.addActionListener(e -> {
-            String path = openFileBrowser();
+            String path = FileUtils.openFileBrowser(this);
             if (path != null) {
                 prih3DbfTextField.setText(path);
             }
         });
         rash3SearchButton.addActionListener(e -> {
-            String path = openFileBrowser();
+            String path = FileUtils.openFileBrowser(this);
             if (path != null) {
                 rash3DbfTextField.setText(path);
             }
@@ -648,7 +647,7 @@ public class MainFrame extends JFrame {
 
     private void onOK() {
         if (!filesChecked) {
-            saveSettings();
+            updateSettings();
             try {
                 tabbedPane.setSelectedComponent(processTab);
                 checkFilesLocations();
@@ -679,27 +678,6 @@ public class MainFrame extends JFrame {
                 SwingUtilities.invokeLater(() -> startDataTransfer(acceptingDialog));
 
             }
-        }
-    }
-
-    private String openFileBrowser() {
-        log.debug("Opening File Browser");
-
-        FileDialog fd = new FileDialog(this, "Выбери файл", FileDialog.LOAD);
-        fd.setIconImage(Toolkit.getDefaultToolkit()
-                .getImage(Main.class.getResource("/img/logo.png")));
-        fd.setDirectory(System.getProperty("user.dir"));
-        fd.setFile("*.dbf");
-        fd.setMultipleMode(false);
-        fd.setVisible(true);
-        String filename = fd.getFile();
-        File[] f = fd.getFiles();
-        if (f.length > 0) {
-            log.debug("Choice: " + fd.getFiles()[0].getAbsolutePath());
-            return fd.getFiles()[0].getAbsolutePath();
-        } else {
-            log.debug("Choice canceled");
-            return null;
         }
     }
 
@@ -759,8 +737,8 @@ public class MainFrame extends JFrame {
         SwingUtilities.invokeLater(runnable);
     }
 
-    private void saveSettings() {
-        log.info("Saving settings");
+    private void updateSettings() {
+        log.info("Updating settings");
         PropertiesUtils.setProperty(PropertiesNames.OST_DBF_NAME, ostDbfTextField.getText());
         PropertiesUtils.setProperty(PropertiesNames.PRIH1_DBF_NAME, prih1DbfTextField.getText());
         PropertiesUtils.setProperty(PropertiesNames.RASH1_DBF_NAME, rash1DbfTextField.getText());

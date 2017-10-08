@@ -1,5 +1,6 @@
 package com.maykop_mmz.ppo.waybillImport.utils;
 
+import com.maykop_mmz.ppo.waybillImport.core.Main;
 import org.apache.log4j.Logger;
 
 import java.awt.*;
@@ -46,6 +47,27 @@ public class FileUtils {
             Files.copy(sourcePath, targetPath.resolve(sourcePath.getFileName()));
         }
 
+    }
+
+    public static String openFileBrowser(Frame parent) {
+        log.debug("Opening File Browser");
+
+        FileDialog fd = new FileDialog(parent, "Выбери файл", FileDialog.LOAD);
+        fd.setIconImage(Toolkit.getDefaultToolkit()
+                .getImage(Main.class.getResource("/img/logo.png")));
+        fd.setDirectory(System.getProperty("user.dir"));
+        fd.setFile("*.dbf");
+        fd.setMultipleMode(false);
+        fd.setVisible(true);
+        String filename = fd.getFile();
+        File[] f = fd.getFiles();
+        if (f.length > 0) {
+            log.debug("Choice: " + fd.getFiles()[0].getAbsolutePath());
+            return fd.getFiles()[0].getAbsolutePath();
+        } else {
+            log.debug("Choice canceled");
+            return null;
+        }
     }
 
 }
