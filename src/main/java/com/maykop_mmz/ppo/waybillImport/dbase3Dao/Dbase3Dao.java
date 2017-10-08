@@ -1,8 +1,6 @@
 package com.maykop_mmz.ppo.waybillImport.dbase3Dao;
 
-import com.linuxense.javadbf.DBFException;
-import com.linuxense.javadbf.DBFReader;
-import com.linuxense.javadbf.DBFUtils;
+import com.linuxense.javadbf.*;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.atom.ManipulatorIndex;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.atom.OstDBValues;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.structures.ConsumptionWaybillStructure;
@@ -65,7 +63,6 @@ public class Dbase3Dao {
         Dbase3Dao.setOstStructure(structure);
     }
 
-
     private static int getFieldNumberByName(DBFReader reader, String fieldName) {
         fieldName = fieldName.toUpperCase();
         for (int i = 0; i < reader.getFieldCount(); i++) {
@@ -84,9 +81,43 @@ public class Dbase3Dao {
         int datIndex = getFieldNumberByName(reader, IncomingWaybillStructure.DAT_FIELD_NAME);
         int kolIndex = getFieldNumberByName(reader, IncomingWaybillStructure.KOL_FIELD_NAME);
 
+        for (int i = 0; i < reader.getFieldCount(); i++) {
+            DBFField field = reader.getField(i);
+            if (i == manIndex) {
+                DBFDataType dbfDataType = field.getType();
+                char ch = dbfDataType.getCharCode();
+                if (ch != 'C') {
+                    throw new DBFException("Field MAN is not a String: " + dbfDataType);
+                }
+            }
+            if (i == kodIndex) {
+                DBFDataType dbfDataType = field.getType();
+                char ch = dbfDataType.getCharCode();
+                if (ch != 'C') {
+                    throw new DBFException("Field KOD is not a String: " + dbfDataType);
+                }
+            }
+
+            if (i == datIndex) {
+                DBFDataType dbfDataType = field.getType();
+                char ch = dbfDataType.getCharCode();
+                if (ch != 'D') {
+                    throw new DBFException("Field DAT is not a Date: " + dbfDataType);
+                }
+            }
+
+            if (i == kolIndex) {
+                DBFDataType dbfDataType = field.getType();
+                char ch = dbfDataType.getCharCode();
+                if (ch != 'N') {
+                    throw new DBFException("Field KOL is not a String: " + dbfDataType);
+                }
+            }
+        }
+
+
         return new IncomingWaybillStructure(manIndex, kodIndex, datIndex, kolIndex, file);
     }
-
 
     public static ConsumptionWaybillStructure generateConsumptionWaybillStructure(DBFReader reader, File file) {
         log.debug("Checking rash1 fields: " + reader.getFieldCount());

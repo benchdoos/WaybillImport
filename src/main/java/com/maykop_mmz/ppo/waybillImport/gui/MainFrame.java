@@ -256,7 +256,7 @@ public class MainFrame extends JFrame {
 
     }
 
-    private void checkFilesStructure() { //FixMe если поменять rash и prih местами, prih спокойно сожрет rash.
+    private void checkFilesStructure() {
         try {
             pushInfoToTextPane("Проверяем структуру файла остатков", Level.INFO);
             checkOstStructure(ostDbfTextField.getText());
@@ -287,6 +287,7 @@ public class MainFrame extends JFrame {
         } catch (DBFException e) {
             log.warn("Something wrong in dbf's structure", e);
             pushInfoToTextPane("Не удалось прочитать файл: " + e.getMessage(), Level.ERROR);
+            pushInfoToTextPane("Проверьте, находятся ли базы на своих местах!", Level.WARN);
             throw e;
         }
     }
@@ -649,8 +650,11 @@ public class MainFrame extends JFrame {
         if (!filesChecked) {
             saveSettings();
             try {
+                tabbedPane.setSelectedComponent(processTab);
                 checkFilesLocations();
                 checkFilesStructure();
+                makeBackup();
+                pushInfoToTextPane("Все готово к проведению импорта", Level.SUCCESS);
                 filesChecked = true;
             } catch (FileNotFoundException e) {
                 final String fileNotFound = "Файл не найден";
@@ -659,7 +663,7 @@ public class MainFrame extends JFrame {
                 log.warn("Could not find a file", e);
             } catch (DBFException e) {
                 log.warn("Can not read file", e);
-                pushInfoToTextPane("Не удалось загрузить файл" + e.getMessage(), Level.ERROR);
+                pushInfoToTextPane("Не удалось загрузить файл: " + e.getMessage(), Level.ERROR);
                 filesChecked = false;
             }
             if (filesChecked) {
@@ -671,7 +675,6 @@ public class MainFrame extends JFrame {
             final boolean result = acceptingDialog.result();
             log.info("Accepted: " + result);
             if (result) {
-                makeBackup();
                 pushInfoToTextPane("===========================================", Level.WARN);
                 SwingUtilities.invokeLater(() -> startDataTransfer(acceptingDialog));
 
