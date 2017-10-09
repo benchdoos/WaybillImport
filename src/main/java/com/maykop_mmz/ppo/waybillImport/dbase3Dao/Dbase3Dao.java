@@ -202,7 +202,7 @@ public class Dbase3Dao {
             }
             return prih1List;
         } catch (DBFException | IOException e) {
-            throw new IOException("Can not read information from prih1 dbf", e);
+            throw new IOException("Can not read information from incoming dbf", e);
         } finally {
             DBFUtils.close(reader);
         }
@@ -266,7 +266,7 @@ public class Dbase3Dao {
             }
             return consumptionList;
         } catch (DBFException | IOException e) {
-            throw new IOException("Can not read information from prih1 dbf", e);
+            throw new IOException("Can not read information from consumption dbf", e);
         } finally {
             DBFUtils.close(reader);
         }
