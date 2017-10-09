@@ -57,4 +57,11 @@ public class ManipulatorIndex {
                 ", code='" + code + '\'' +
                 '}';
     }
+
+    public String getShortString() {
+        return "{" +
+                serial +
+                code +
+                "}";
+    }
 }
