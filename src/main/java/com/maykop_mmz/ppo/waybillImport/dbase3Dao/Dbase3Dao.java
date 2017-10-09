@@ -184,7 +184,9 @@ public class Dbase3Dao {
                 String code = (String) rowObjects[structure.getKodIndex()];
                 waybillRecord.setManipulatorIndex(new ManipulatorIndex(serial, code));
 
-                waybillRecord.setDate((Date) rowObjects[structure.getDatIndex()]);
+                Date waybillRecordDate = (Date) rowObjects[structure.getDatIndex()];
+
+                waybillRecord.setDate(removeTime(waybillRecordDate));
                 waybillRecord.setCount((BigDecimal) rowObjects[structure.getKolIndex()]);
 
                 if (date != null && waybillRecord.getDate() != null) {
@@ -403,5 +405,15 @@ public class Dbase3Dao {
         } finally {
             DBFUtils.close(reader);
         }
+    }
+
+    public static Date removeTime(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
     }
 }

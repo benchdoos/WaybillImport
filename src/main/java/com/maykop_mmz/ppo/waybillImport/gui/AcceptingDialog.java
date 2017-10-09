@@ -3,6 +3,7 @@ package com.maykop_mmz.ppo.waybillImport.gui;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import com.maykop_mmz.ppo.waybillImport.dbase3Dao.Dbase3Dao;
 import com.maykop_mmz.ppo.waybillImport.utils.FrameUtils;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -156,22 +157,15 @@ class AcceptingDialog extends JDialog {
 
     public Date getSelectedDate() {
         Date result = (Date) datePicker.getModel().getValue();
-        result = removeTime(result);
+        result = Dbase3Dao.removeTime(result);
         return result;
     }
 
     public boolean isDateSelected() {
         return datePicker.getModel().isSelected();
     }
-    private static Date removeTime(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal.getTime();
-    }
+
+
     private void onCancel() {
         // add your code here if necessary
         dispose();
