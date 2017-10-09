@@ -293,15 +293,11 @@ public class MainFrame extends JFrame {
 
     private void checkOstStructure(String path) throws DBFException {
         log.info("Scanning structure of ost in: " + path);
-        DBFReader reader = null;
-        try {
-            reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
+        try (DBFReader reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET))) {
             Dbase3Dao.generateOstStructure(reader, new File(path));
         } catch (DBFException | IOException e) {
             log.warn("Can not read " + path, e);
             throw new DBFException(e);
-        } finally {
-            DBFUtils.close(reader);
         }
     }
 
@@ -407,10 +403,10 @@ public class MainFrame extends JFrame {
     }
 
     private void exportListToOst(ArrayList<OstDetailPosition> ostDetailPositions, HashMap<ManipulatorIndex, OstDBValues> manipulatorIndexHashMap, OstStructure structure) {
+        final String pathname = structure.getFile().getParent() + File.separator + "OST_.dbf";
 
-        try {
-            DBFReader reader = new DBFReader(new FileInputStream(structure.getFile()), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
-            final String pathname = structure.getFile().getParent() + File.separator + "OST_.dbf";
+        try (DBFReader reader = new DBFReader(new FileInputStream(structure.getFile()),
+                Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));) {
             new File(pathname).delete();
             DBFWriter writer = new DBFWriter(new File(pathname), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
 
@@ -461,7 +457,7 @@ public class MainFrame extends JFrame {
             reader.close();
             writer.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            log.warn("Could not write file to " + pathname, e);
         }
     }
 
@@ -492,7 +488,6 @@ public class MainFrame extends JFrame {
 
     private DBFField[] generateFields(DBFReader reader) {
         DBFField[] fields = new DBFField[reader.getFieldCount()];
-
 
         for (int i = 0; i < reader.getFieldCount(); i++) {
             fields[i] = reader.getField(i);

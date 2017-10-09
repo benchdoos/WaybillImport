@@ -20,9 +20,8 @@ public class PropertiesUtils {
         properties = new Properties();
         File file = new File(ApplicationConstants.PROPERTIES_FILE_PATH);
         if (file.exists()) {
-            try {
+            try (FileInputStream fileInputStream = new FileInputStream(file)) {
                 log.debug("File " + ApplicationConstants.PROPERTIES_FILE_PATH + " exists");
-                FileInputStream fileInputStream = new FileInputStream(file);
                 properties.loadFromXML(fileInputStream);
             } catch (FileNotFoundException e) {
                 log.warn("Can not find settings: " + file.getPath());
@@ -37,17 +36,15 @@ public class PropertiesUtils {
     }
 
     public static void setProperty(String property, String value) {
-        properties.setProperty(property,value);
+        properties.setProperty(property, value);
     }
 
     public static void saveProperties() {
         File file = new File(ApplicationConstants.PROPERTIES_FILE_PATH);
-        try {
-            FileOutputStream fileOutputStream;
-            fileOutputStream = new FileOutputStream(file);
-            properties.storeToXML(fileOutputStream,"","UTF-8");
+        try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+            properties.storeToXML(fileOutputStream, "", "UTF-8");
         } catch (IOException e) {
-            log.warn("Can not write file to: " + file.getPath(),e);
+            log.warn("Can not write file to: " + file.getPath(), e);
         }
     }
 }

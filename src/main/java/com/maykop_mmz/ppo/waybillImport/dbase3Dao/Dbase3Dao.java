@@ -167,9 +167,7 @@ public class Dbase3Dao {
 
     public static ArrayList<IncomingWaybillRecord> getIncomingWaybillsAfterDateArrayList(IncomingWaybillStructure structure, Date date) throws IOException {
         ArrayList<IncomingWaybillRecord> prih1List = new ArrayList<>();
-        DBFReader reader = null;
-        try {
-            reader = new DBFReader(new FileInputStream(structure.getFile()), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
+        try (DBFReader reader = new DBFReader(new FileInputStream(structure.getFile()), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET))) {
             Object[] rowObjects;
 
             Date lastWaybillDate = date;
@@ -203,17 +201,15 @@ public class Dbase3Dao {
             return prih1List;
         } catch (DBFException | IOException e) {
             throw new IOException("Can not read information from incoming dbf", e);
-        } finally {
-            DBFUtils.close(reader);
         }
     }
 
     public static ArrayList<ConsumptionWaybillRecord> getConsumptionWaybillsAfterDateArrayList(
             ConsumptionWaybillStructure structure, Date date) throws IOException {
         ArrayList<ConsumptionWaybillRecord> consumptionList = new ArrayList<>();
-        DBFReader reader = null;
-        try {
-            reader = new DBFReader(new FileInputStream(structure.getFile()), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
+
+        try (DBFReader reader = new DBFReader(new FileInputStream(structure.getFile()),
+                Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET))) {
             Object[] rowObjects;
 
             Date lastWaybillDate = date;
@@ -267,8 +263,6 @@ public class Dbase3Dao {
             return consumptionList;
         } catch (DBFException | IOException e) {
             throw new IOException("Can not read information from consumption dbf", e);
-        } finally {
-            DBFUtils.close(reader);
         }
     }
 
@@ -278,9 +272,8 @@ public class Dbase3Dao {
         details = importSearchingDetails(map);
 
 
-        DBFReader reader = null;
-        try {
-            reader = new DBFReader(new FileInputStream(structure.getFile()), Charset.forName(DEFAULT_DBF_CHARSET));
+        try (DBFReader reader = new DBFReader(new FileInputStream(structure.getFile()),
+                Charset.forName(DEFAULT_DBF_CHARSET))) {
             Object[] rowObjects;
 
             for (int i = 0; i < reader.getRecordCount(); i++) {
@@ -304,8 +297,6 @@ public class Dbase3Dao {
             return details;
         } catch (DBFException | IOException e) {
             throw new IOException("Can not read information from prih1 dbf", e);
-        } finally {
-            DBFUtils.close(reader);
         }
     }
 
@@ -347,63 +338,48 @@ public class Dbase3Dao {
 
     public static void checkPrih1Structure(String path) {
         log.info("Scanning structure of prih1 in: " + path);
-        DBFReader reader = null;
-        try {
-            reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
+        try (DBFReader reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET))) {
             IncomingWaybillStructure structure = Dbase3Dao.generateIncomingWaybillStructure(reader, new File(path));
             Dbase3Dao.setPrih1Structure(structure);
         } catch (DBFException | IOException e) {
             log.warn("Can not read " + path, e);
             throw new DBFException(e);
-        } finally {
-            DBFUtils.close(reader);
         }
     }
 
     public static void checkPrih3Structure(String path) {
         log.info("Scanning structure of prih3 in: " + path);
-        DBFReader reader = null;
-        try {
-            reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
+        try (DBFReader reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET))) {
             IncomingWaybillStructure structure = Dbase3Dao.generateIncomingWaybillStructure(reader, new File(path));
             Dbase3Dao.setPrih3Structure(structure);
         } catch (DBFException | IOException e) {
             log.warn("Can not read " + path, e);
             throw new DBFException(e);
-        } finally {
-            DBFUtils.close(reader);
         }
     }
 
     public static void checkRash1Structure(String path) {
         log.info("Scanning structure of rash1 in: " + path);
-        DBFReader reader = null;
-        try {
-            reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
+        try (DBFReader reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET))){
             final ConsumptionWaybillStructure structure = Dbase3Dao.generateConsumptionWaybillStructure(reader, new File(path));
             Dbase3Dao.setRash1Structure(structure);
 
         } catch (DBFException | IOException e) {
             log.warn("Can not read " + path, e);
             throw new DBFException(e);
-        } finally {
-            DBFUtils.close(reader);
         }
     }
 
     public static void checkRash3Structure(String path) {
         log.info("Scanning structure of rash3 in: " + path);
-        DBFReader reader = null;
-        try {
-            reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET));
+        try (DBFReader reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET))) {
+
             final ConsumptionWaybillStructure structure = Dbase3Dao.generateConsumptionWaybillStructure(reader, new File(path));
             Dbase3Dao.setRash3Structure(structure);
 
         } catch (DBFException | IOException e) {
             log.warn("Can not read " + path, e);
             throw new DBFException(e);
-        } finally {
-            DBFUtils.close(reader);
         }
     }
 
