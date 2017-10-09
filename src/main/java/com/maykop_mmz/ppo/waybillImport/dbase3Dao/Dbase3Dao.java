@@ -6,6 +6,7 @@ import com.maykop_mmz.ppo.waybillImport.dbase3Dao.atom.OstDBValues;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.structures.ConsumptionWaybillStructure;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.structures.IncomingWaybillStructure;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.structures.OstStructure;
+import com.maykop_mmz.ppo.waybillImport.dbase3Dao.structures.WaybillStructure;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.types.ConsumptionWaybillRecord;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.types.IncomingWaybillRecord;
 import com.maykop_mmz.ppo.waybillImport.utils.Logging;
@@ -27,6 +28,7 @@ public class Dbase3Dao {
     public static File backupFolder;
     private static OstStructure ostStructure;
     private static IncomingWaybillStructure prih1Structure;
+    private static IncomingWaybillStructure incomingSZWaybillStructure;
     private static ConsumptionWaybillStructure rash1Structure;
     private static Logger log = Logger.getLogger(Logging.getCurrentClassName());
     private static IncomingWaybillStructure prih3Structure;
@@ -360,7 +362,7 @@ public class Dbase3Dao {
 
     public static void checkRash1Structure(String path) {
         log.info("Scanning structure of rash1 in: " + path);
-        try (DBFReader reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET))){
+        try (DBFReader reader = new DBFReader(new FileInputStream(path), Charset.forName(Dbase3Dao.DEFAULT_DBF_CHARSET))) {
             final ConsumptionWaybillStructure structure = Dbase3Dao.generateConsumptionWaybillStructure(reader, new File(path));
             Dbase3Dao.setRash1Structure(structure);
 
@@ -391,5 +393,21 @@ public class Dbase3Dao {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTime();
+    }
+
+    public static WaybillStructure generateIncomingStructure(int storeIndex) {
+        if (storeIndex == Stores.SZ1 || storeIndex == Stores.SG1) {
+            return new WaybillStructure(); // TODO HERE!!!!
+        } else {
+            throw new IllegalArgumentException("store should be:" + Stores.SZ1 + " or " + Stores.SG1 + " but current is: " + storeIndex);
+        }
+    }
+
+    public static IncomingWaybillStructure getIncomingSZWaybillStructure() {
+        return incomingSZWaybillStructure;
+    }
+
+    public static void setIncomingSZWaybillStructure(IncomingWaybillStructure incomingSZWaybillStructure) {
+        Dbase3Dao.incomingSZWaybillStructure = incomingSZWaybillStructure;
     }
 }

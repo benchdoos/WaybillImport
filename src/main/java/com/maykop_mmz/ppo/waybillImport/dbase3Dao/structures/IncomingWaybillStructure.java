@@ -3,81 +3,43 @@ package com.maykop_mmz.ppo.waybillImport.dbase3Dao.structures;
 import com.sun.istack.internal.NotNull;
 
 import java.io.File;
+import java.util.Date;
+
+import static com.maykop_mmz.ppo.waybillImport.dbase3Dao.structures.ConsumptionWaybillStructure.DAT_FIELD_NAME;
 
 /**
  * Created by Eugene Zrazhevsky on 006 06.10.2017.
  */
-public class IncomingWaybillStructure {
-    public static final String MAN_FIELD_NAME = "MAN";
-    public static final String KOD_FIELD_NAME = "KOD";
+public class IncomingWaybillStructure extends WaybillStructure {
     public static final String DAT_FIELD_NAME = "DAT";
-    public static final String KOL_FIELD_NAME = "KOL";
 
-    private int manIndex;
-    private int kodIndex;
-    private int datIndex;
-    private int kolIndex;
-    private File file;
+    private int dateIndex;
 
-    public IncomingWaybillStructure() {
+    public IncomingWaybillStructure(int dateIndex) {
+        this.dateIndex = dateIndex;
     }
 
-    public IncomingWaybillStructure(int manIndex, int kodIndex, int datIndex, int kolIndex,
-                                    @NotNull File file) {
-        this.manIndex = manIndex;
-        this.kodIndex = kodIndex;
-        this.datIndex = datIndex;
-        this.kolIndex = kolIndex;
-        this.file = file;
-    }
-
-    public int getDatIndex() {
-        return datIndex;
-    }
-
-    public void setDatIndex(int datIndex) {
-        this.datIndex = datIndex;
-    }
-
-    public File getFile() {
-        return file;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
-    }
-
-    public int getKodIndex() {
-        return kodIndex;
-    }
-
-    public void setKodIndex(int kodIndex) {
-        this.kodIndex = kodIndex;
-    }
-
-    public int getKolIndex() {
-        return kolIndex;
-    }
-
-    public void setKolIndex(int kolIndex) {
-        this.kolIndex = kolIndex;
-    }
-
-    public int getManIndex() {
-        return manIndex;
-    }
-
-    public void setManIndex(int manIndex) {
-        this.manIndex = manIndex;
+    public IncomingWaybillStructure(int manIndex, int kodIndex, int datIndex, int kolIndex, File file, int dateIndex) {
+        super(manIndex, kodIndex, datIndex, kolIndex, file);
+        this.dateIndex = dateIndex;
     }
 
     @Override
     public String toString() {
         return "IncomingWaybillStructure{" +
-                MAN_FIELD_NAME + ":" + manIndex + ", " +
-                KOD_FIELD_NAME + ":" + kodIndex + ", " +
-                DAT_FIELD_NAME + ":" + datIndex + ", " +
-                KOL_FIELD_NAME + ":" + kolIndex +
+                MAN_FIELD_NAME + ":" + super.getManIndex() + ", " +
+                KOD_FIELD_NAME + ":" + super.getKodIndex() + ", " +
+                DAT_FIELD_NAME + ":" + super.getDatIndex() + ", " +
+                KOL_FIELD_NAME + ":" + super.getKolIndex() +
                 "}";
+    }
+
+
+    public int getDateIndex() {
+        return dateIndex;
+    }
+
+    public void setDateIndex(int dateIndex) {
+        this.dateIndex = dateIndex;
     }
 }

@@ -13,8 +13,10 @@ import com.maykop_mmz.ppo.waybillImport.dbase3Dao.atom.OstDBValues;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.structures.ConsumptionWaybillStructure;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.structures.IncomingWaybillStructure;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.structures.OstStructure;
+import com.maykop_mmz.ppo.waybillImport.dbase3Dao.structures.WaybillStructure;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.types.ConsumptionWaybillRecord;
 import com.maykop_mmz.ppo.waybillImport.dbase3Dao.types.IncomingWaybillRecord;
+import com.maykop_mmz.ppo.waybillImport.dbase3Dao.types.Waybill;
 import com.maykop_mmz.ppo.waybillImport.utils.*;
 import org.apache.log4j.Logger;
 
@@ -145,7 +147,8 @@ public class MainFrame extends JFrame {
             pushInfoToTextPane("Все ок.", Level.SUCCESS);
 
             pushInfoToTextPane("Проверяем структуру файла прихода СЗ", Level.INFO);
-            Dbase3Dao.checkPrih1Structure(prih1DbfTextField.getText());
+//            Dbase3Dao.checkPrih1Structure(prih1DbfTextField.getText());
+            Dbase3Dao.generateIncomingStructure(Stores.SZ1);
             prih1Label.setForeground(DEFAULT_GREEN_COLOR);
             pushInfoToTextPane("Все ок.", Level.SUCCESS);
 
@@ -402,6 +405,14 @@ public class MainFrame extends JFrame {
         //DBase3Dao.printMap(manipulatorIndexHashMap);
         log.info("Checked records: " + prih1List.size());
         pushInfoToTextPane("Все ок.", Level.SUCCESS);
+    }
+
+    private void importWaybills(final WaybillStructure structure, final int from, final int to, final Date date) {
+        if (from == Stores.KUZ && to == Stores.SZ1) {
+            IncomingWaybillStructure waybillStructure = (IncomingWaybillStructure) structure;
+            log.info("Starting import prih1 since date: " + date);
+            pushInfoToTextPane("Начинаем составлять списки изменений для прихода СЗ начиная с " + date, Level.INFO);
+        }
     }
 
     private void importPrih3(IncomingWaybillStructure prih3Structure, Date date) throws IOException {
@@ -676,7 +687,10 @@ public class MainFrame extends JFrame {
 
     private void startImport(final Date date) {
         try {
-            startImportPrih1(date);
+
+            importWaybills(Dbase3Dao.getIncomingSZWaybillStructure(),Stores.KUZ,Stores.SZ1, date);
+
+            /*startImportPrih1(date);
 
             startImportRash1(date);
 
@@ -685,13 +699,14 @@ public class MainFrame extends JFrame {
             startImportRash3(date);
 
 
-            startExportToOst();
+            startExportToOst();*/
 
             pushInfoToTextPane("===========================================", Level.WARN);
             pushInfoToTextPane("Импорт накладных в базу остатков успешно завершен", Level.SUCCESS);
             log.info("Import stopped successfully!");
 
 
+            throw new IOException();//TODO REMOVE
         } catch (IOException e1) {
             log.error("Could not load some waybills, rolling back all operations");
             pushInfoToTextPane(
