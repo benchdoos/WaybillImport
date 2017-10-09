@@ -42,6 +42,15 @@ public class OstDBValues {
         } else return false;
     }
 
+    @Override
+    public int hashCode() {
+        int result = sz1 != null ? sz1.hashCode() : 0;
+        result = 31 * result + (mz1 != null ? mz1.hashCode() : 0);
+        result = 31 * result + (sg1 != null ? sg1.hashCode() : 0);
+        result = 31 * result + (pz1 != null ? pz1.hashCode() : 0);
+        return result;
+    }
+
     public BigDecimal getMz1() {
         return mz1;
     }

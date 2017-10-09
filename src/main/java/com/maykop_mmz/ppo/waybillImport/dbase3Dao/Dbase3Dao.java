@@ -23,7 +23,7 @@ import java.util.*;
  */
 public class Dbase3Dao {
     public static final String DEFAULT_DBF_CHARSET = "cp866";
-    public static final HashMap<ManipulatorIndex, OstDBValues> manipulatorIndexHashMap = new HashMap<>();
+    public static final HashMap<ManipulatorIndex, OstDBValues> manipulatorIndexHashMap = new HashMap<>(); //FixMe FindBugs-IDEA: Consider wrapping this field into Collections.unmodifiableSet/List/Map/etc. to avoid this vulnerability.
     public static File backupFolder;
     private static OstStructure ostStructure;
     private static IncomingWaybillStructure prih1Structure;

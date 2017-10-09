@@ -19,7 +19,7 @@ public class ConsumptionWaybillRecord {
 
         this.recordId = recordId;
         this.manipulatorIndex = manipulatorIndex;
-        this.date = date;
+        this.date = new Date(date.getTime());
         this.store = store;
         this.count = count;
     }
@@ -36,11 +36,11 @@ public class ConsumptionWaybillRecord {
     }
 
     public Date getDate() {
-        return date;
+        return new Date(date.getTime());
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        this.date = new Date(date.getTime());
     }
 
     public ManipulatorIndex getManipulatorIndex() {

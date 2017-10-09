@@ -18,16 +18,16 @@ public class IncomingWaybillRecord {
     public IncomingWaybillRecord(int recordId, ManipulatorIndex manipulatorIndex, Date date, BigDecimal count) {
         this.recordId = recordId;
         this.manipulatorIndex = manipulatorIndex;
-        this.date = date;
+        this.date = new Date(date.getTime());
         this.count = count;
     }
 
     public Date getDate() {
-        return date;
+        return new Date(date.getTime());
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        this.date = new Date(date.getTime());
     }
 
     public BigDecimal getCount() {
