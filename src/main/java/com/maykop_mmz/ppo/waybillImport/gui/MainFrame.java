@@ -676,56 +676,16 @@ public class MainFrame extends JFrame {
 
     private void startImport(final Date date) {
         try {
-            try {
-                importPrih1(Dbase3Dao.getPrih1Structure(), date);
-                pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
-            } catch (IOException e) {
-                log.error("Can not load incoming waybills to stock of blanks (prih1)", e);
-                pushInfoToTextPane("Не удалось импортировать приход склада заготовок (prih1)", Level.ERROR);
-                throw new IOException(e);
-            }
+            startImportPrih1(date);
 
-            try {
-                importRash1(Dbase3Dao.getRash1Structure(), date);
-                pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
-            } catch (IOException e) {
-                log.error("Can not load consumption waybills from stock of blanks (rash1)", e);
-                pushInfoToTextPane("Не удалось импортировать расход склада заготовок (rash1)", Level.ERROR);
-                throw new IOException(e);
-            }
+            startImportRash1(date);
 
-            try {
-                importPrih3(Dbase3Dao.getPrih3Structure(), date);
-                pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
-            } catch (IOException e) {
-                log.error("Can not load incoming waybills to stock of finished parts (prih3)", e);
-                pushInfoToTextPane("Не удалось импортировать приход склада готовых деталей (prih3)", Level.ERROR);
-                throw new IOException(e);
-            }
+            startImportPrih3(date);
 
-            try {
-                importRash3(Dbase3Dao.getRash3Structure(), date);
-                pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
-            } catch (IOException e) {
-                log.error("Can not load consumption waybills from stock of finished parts (rash3)", e);
-                pushInfoToTextPane("Не удалось импортировать расход склада готовых деталей (rash3)", Level.ERROR);
-                throw new IOException(e);
-            }
+            startImportRash3(date);
 
 
-            try {
-                pushInfoToTextPane("Собираем список полей, которые необходимо изменить", Level.INFO);
-                final ArrayList<OstDetailPosition> list = findRecords(Dbase3Dao.getOstStructure(), Dbase3Dao.manipulatorIndexHashMap);
-                pushInfoToTextPane("Всего полей для изменения в базе: " + list.size(), Level.INFO);
-
-                scanList(list);
-
-                exportListToOst(list, Dbase3Dao.manipulatorIndexHashMap, Dbase3Dao.getOstStructure());
-            } catch (IOException e) {
-                log.error("Could not prepare list of changing details or push them to base ost dbf");
-                pushInfoToTextPane("Не удалось подготовить список изменяемых деталей или сохранить их в базе остатков", Level.ERROR);
-                throw new IOException(e);
-            }
+            startExportToOst();
 
             pushInfoToTextPane("===========================================", Level.WARN);
             pushInfoToTextPane("Импорт накладных в базу остатков успешно завершен", Level.SUCCESS);
@@ -742,6 +702,66 @@ public class MainFrame extends JFrame {
 
         setEnabledUIElements(true);
 
+    }
+
+    private void startExportToOst() throws IOException {
+        try {
+            pushInfoToTextPane("Собираем список полей, которые необходимо изменить", Level.INFO);
+            final ArrayList<OstDetailPosition> list = findRecords(Dbase3Dao.getOstStructure(), Dbase3Dao.manipulatorIndexHashMap);
+            pushInfoToTextPane("Всего полей для изменения в базе: " + list.size(), Level.INFO);
+
+            scanList(list);
+
+            exportListToOst(list, Dbase3Dao.manipulatorIndexHashMap, Dbase3Dao.getOstStructure());
+        } catch (IOException e) {
+            log.error("Could not prepare list of changing details or push them to base ost dbf");
+            pushInfoToTextPane("Не удалось подготовить список изменяемых деталей или сохранить их в базе остатков", Level.ERROR);
+            throw new IOException(e);
+        }
+    }
+
+    private void startImportRash3(Date date) throws IOException {
+        try {
+            importRash3(Dbase3Dao.getRash3Structure(), date);
+            pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
+        } catch (IOException e) {
+            log.error("Can not load consumption waybills from stock of finished parts (rash3)", e);
+            pushInfoToTextPane("Не удалось импортировать расход склада готовых деталей (rash3)", Level.ERROR);
+            throw new IOException(e);
+        }
+    }
+
+    private void startImportPrih3(Date date) throws IOException {
+        try {
+            importPrih3(Dbase3Dao.getPrih3Structure(), date);
+            pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
+        } catch (IOException e) {
+            log.error("Can not load incoming waybills to stock of finished parts (prih3)", e);
+            pushInfoToTextPane("Не удалось импортировать приход склада готовых деталей (prih3)", Level.ERROR);
+            throw new IOException(e);
+        }
+    }
+
+    private void startImportRash1(Date date) throws IOException {
+        try {
+            importRash1(Dbase3Dao.getRash1Structure(), date);
+            pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
+        } catch (IOException e) {
+            log.error("Can not load consumption waybills from stock of blanks (rash1)", e);
+            pushInfoToTextPane("Не удалось импортировать расход склада заготовок (rash1)", Level.ERROR);
+            throw new IOException(e);
+        }
+    }
+
+    private void startImportPrih1(Date date) throws IOException {
+        try {
+            importPrih1(Dbase3Dao.getPrih1Structure(), date);
+            pushInfoToTextPane("Всего подготовлено к импорту записей: " + manipulatorIndexHashMap.size(), Level.SUCCESS);
+        } catch (IOException e) {
+            log.error("Can not load incoming waybills to stock of blanks (prih1)", e);
+            pushInfoToTextPane("Не удалось импортировать приход склада заготовок (prih1)", Level.ERROR);
+            throw new IOException(e);
+        }
     }
 
     {
