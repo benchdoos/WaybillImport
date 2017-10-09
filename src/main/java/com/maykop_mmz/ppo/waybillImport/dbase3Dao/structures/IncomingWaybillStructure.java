@@ -1,5 +1,7 @@
 package com.maykop_mmz.ppo.waybillImport.dbase3Dao.structures;
 
+import com.sun.istack.internal.NotNull;
+
 import java.io.File;
 
 /**
@@ -20,7 +22,8 @@ public class IncomingWaybillStructure {
     public IncomingWaybillStructure() {
     }
 
-    public IncomingWaybillStructure(int manIndex, int kodIndex, int datIndex, int kolIndex, File file) {
+    public IncomingWaybillStructure(int manIndex, int kodIndex, int datIndex, int kolIndex,
+                                    @NotNull File file) {
         this.manIndex = manIndex;
         this.kodIndex = kodIndex;
         this.datIndex = datIndex;
