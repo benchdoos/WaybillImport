@@ -1,5 +1,7 @@
 package com.maykop_mmz.ppo.waybillImport.dbase3Dao.types;
 
+import com.maykop_mmz.ppo.waybillImport.dbase3Dao.atom.ManipulatorIndex;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -85,5 +87,14 @@ public class Waybill {
 
     public void setSendFromStore(int sendFromStore) {
         this.sendFromStore = sendFromStore;
+    }
+
+    public boolean contains(ManipulatorIndex index) {
+        for (WaybillRecord record : waybillRecords) {
+            if (record.getManipulatorIndex().equals(index)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
