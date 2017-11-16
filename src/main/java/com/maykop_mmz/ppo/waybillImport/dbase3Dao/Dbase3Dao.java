@@ -175,27 +175,32 @@ public class Dbase3Dao {
             for (int i = 0; i < reader.getRecordCount(); i++) {
                 rowObjects = reader.nextRecord();
 
-                IncomingWaybillRecord waybillRecord = new IncomingWaybillRecord();
-                waybillRecord.setRecordId(i);
+                try {
+                    IncomingWaybillRecord waybillRecord = new IncomingWaybillRecord();
+                    waybillRecord.setRecordId(i);
 
-                String serial = (String) rowObjects[structure.getManIndex()];
-                String code = (String) rowObjects[structure.getKodIndex()];
-                waybillRecord.setManipulatorIndex(new ManipulatorIndex(serial, code));
+                    String serial = (String) rowObjects[structure.getManIndex()];
+                    String code = (String) rowObjects[structure.getKodIndex()];
+                    waybillRecord.setManipulatorIndex(new ManipulatorIndex(serial, code));
 
-                Date waybillRecordDate = (Date) rowObjects[structure.getDatIndex()];
+                    Date waybillRecordDate = (Date) rowObjects[structure.getDatIndex()];
 
-                waybillRecord.setDate(removeTime(waybillRecordDate));
-                waybillRecord.setCount((BigDecimal) rowObjects[structure.getKolIndex()]);
+                    waybillRecord.setDate(removeTime(waybillRecordDate));
 
-                if (date != null && waybillRecord.getDate() != null) {
-                    if (waybillRecord.getDate().equals(date) || waybillRecord.getDate().after(date)) {
-                        prih1List.add(waybillRecord);
+                    waybillRecord.setCount((BigDecimal) rowObjects[structure.getKolIndex()]);
 
-                        if (!lastWaybillDate.equals(waybillRecord.getDate())) {
-                            lastWaybillDate = waybillRecord.getDate();
-                            log.info("Added incoming waybill by date: " + lastWaybillDate);
+                    if (date != null && waybillRecord.getDate() != null) {
+                        if (waybillRecord.getDate().equals(date) || waybillRecord.getDate().after(date)) {
+                            prih1List.add(waybillRecord);
+
+                            if (!lastWaybillDate.equals(waybillRecord.getDate())) {
+                                lastWaybillDate = waybillRecord.getDate();
+                                log.info("Added incoming waybill by date: " + lastWaybillDate);
+                            }
                         }
                     }
+                } catch (Exception e) {
+                    log.warn("Could not add detail on record id: " + i);
                 }
             }
             return prih1List;
@@ -384,6 +389,9 @@ public class Dbase3Dao {
     }
 
     public static Date removeTime(Date date) {
+        if (date == null) {
+            throw new IllegalArgumentException("Date can not be null");
+        }
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.set(Calendar.HOUR_OF_DAY, 0);

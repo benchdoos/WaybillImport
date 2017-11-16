@@ -34,10 +34,7 @@ import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 import static com.maykop_mmz.ppo.waybillImport.dbase3Dao.Dbase3Dao.manipulatorIndexHashMap;
 
@@ -141,6 +138,8 @@ public class MainFrame extends JFrame {
         try {
             pushInfoToTextPane("Проверяем структуру файла остатков", Level.INFO);
             checkOstStructure(ostDbfTextField.getText());
+            log.debug("Ost structure: " + Dbase3Dao.getOstStructure());
+
             ostLabel.setForeground(DEFAULT_GREEN_COLOR);
             pushInfoToTextPane("Все ок.", Level.SUCCESS);
 
@@ -302,7 +301,7 @@ public class MainFrame extends JFrame {
             try {
                 writer.setFields(fields);
             } catch (DBFException e) {
-                log.debug("Fields already exist, nevermind", e);
+                log.debug("Fields already exist, nevermind");
             }
 
 
@@ -336,7 +335,11 @@ public class MainFrame extends JFrame {
                         pushInfoToTextPane("Несоответсвие деталей, что-то пошло не так... Ожидалась" + current + " на id: " + i, Level.ERROR);
                     }
                 } else {
-                    writer.addRecord(record);
+                    try {
+                        writer.addRecord(record);
+                    } catch (DBFException e) {
+                        log.warn("Could not add record: " + i + " " + Arrays.toString(record));
+                    }
                 }
             }
         } catch (FileNotFoundException e) {
