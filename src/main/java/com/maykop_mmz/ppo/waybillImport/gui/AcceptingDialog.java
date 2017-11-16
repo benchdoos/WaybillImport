@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Properties;
 
 class AcceptingDialog extends JDialog {
@@ -25,6 +26,7 @@ class AcceptingDialog extends JDialog {
     private JPanel pickerPanel;
     private JDatePickerImpl datePicker;
     private boolean result = false;
+    private Date defaultStartDate = DateUtils.date(1917, 9, 1);
 
     public AcceptingDialog() {
         $$$setupUI$$$();
@@ -84,9 +86,11 @@ class AcceptingDialog extends JDialog {
         JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
         datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
         datePicker.setTextEditable(true);
-        datePicker.getModel().setDay(1);
-        datePicker.getModel().setMonth(8);
-        datePicker.getModel().setYear(1917);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(defaultStartDate);
+        datePicker.getModel().setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        datePicker.getModel().setMonth(calendar.get(Calendar.MONTH));
+        datePicker.getModel().setYear(calendar.get(Calendar.YEAR));
     }
 
     public Date getSelectedDate() {
@@ -204,5 +208,13 @@ class AcceptingDialog extends JDialog {
             return "";
         }
 
+    }
+}
+
+class DateUtils {
+    public static Date date(int year, int month, int date) {
+        Calendar working = GregorianCalendar.getInstance();
+        working.set(year, month, date, 0, 0, 1);
+        return working.getTime();
     }
 }
