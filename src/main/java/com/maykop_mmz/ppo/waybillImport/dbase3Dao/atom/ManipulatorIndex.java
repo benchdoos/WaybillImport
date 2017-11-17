@@ -9,8 +9,8 @@ public class ManipulatorIndex {
     private String code;
 
     public ManipulatorIndex(String serial, String code) {
-        this.serial = serial;
-        this.code = code;
+        this.serial = serial.toUpperCase();
+        this.code = code.toUpperCase();
     }
 
     public ManipulatorIndex() {

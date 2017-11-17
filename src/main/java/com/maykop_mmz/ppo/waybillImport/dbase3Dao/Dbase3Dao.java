@@ -179,8 +179,8 @@ public class Dbase3Dao {
                     IncomingWaybillRecord waybillRecord = new IncomingWaybillRecord();
                     waybillRecord.setRecordId(i);
 
-                    String serial = (String) rowObjects[structure.getManIndex()];
-                    String code = (String) rowObjects[structure.getKodIndex()];
+                    String serial = ((String) rowObjects[structure.getManIndex()]).toUpperCase();
+                    String code = ((String) rowObjects[structure.getKodIndex()]).toUpperCase();
                     waybillRecord.setManipulatorIndex(new ManipulatorIndex(serial, code));
 
                     Date waybillRecordDate = (Date) rowObjects[structure.getDatIndex()];
@@ -225,8 +225,8 @@ public class Dbase3Dao {
                 ConsumptionWaybillRecord waybillRecord = new ConsumptionWaybillRecord();
                 waybillRecord.setRecordId(i);
 
-                String serial = (String) rowObjects[structure.getManIndex()];
-                String code = (String) rowObjects[structure.getKodIndex()];
+                String serial = ((String) rowObjects[structure.getManIndex()]).toUpperCase();
+                String code = ((String) rowObjects[structure.getKodIndex()]).toUpperCase();
                 waybillRecord.setManipulatorIndex(new ManipulatorIndex(serial, code));
 
                 String dayString = (String) rowObjects[structure.getDayIndex()];
