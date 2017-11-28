@@ -709,6 +709,8 @@ public class MainFrame extends JFrame {
 
     private void startImport(final Date date) {
         try {
+            manipulatorIndexHashMap.clear();
+
             startImportPrih1(date);
 
             startImportRash1(date);
