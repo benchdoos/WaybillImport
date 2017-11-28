@@ -36,6 +36,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.maykop_mmz.ppo.waybillImport.dbase3Dao.Dbase3Dao.backupFolder;
 import static com.maykop_mmz.ppo.waybillImport.dbase3Dao.Dbase3Dao.manipulatorIndexHashMap;
 
 public class MainFrame extends JFrame {
@@ -220,8 +221,10 @@ public class MainFrame extends JFrame {
 
         ostSearchButton.addActionListener(e -> {
             String path = FileUtils.openFileBrowser(this);
-            if (path != null)
+            if (path != null) {
                 ostDbfTextField.setText(path);
+                waybillAutoDetect(path);
+            }
         });
         prih1SearchButton.addActionListener(e -> {
             String path = FileUtils.openFileBrowser(this);
@@ -281,6 +284,32 @@ public class MainFrame extends JFrame {
         pack();
         setMinimumSize(getSize());
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
+    }
+
+    private void waybillAutoDetect(String path) {
+        File folder = new File(path).getParentFile();
+        if (folder.exists() && folder.isDirectory()) {
+            final String PRIH1_NAME = "prih1.dbf";
+            final String PRIH3_NAME = "prih3.dbf";
+            final String RASH1_NAME = "rash1.dbf";
+            final String RASH3_NAME = "rash3.dbf";
+            File prih1_file = new File(folder.getPath() + File.separator + PRIH1_NAME);
+            if (prih1_file.exists()) {
+                prih1DbfTextField.setText(prih1_file.getAbsolutePath());
+            }
+            File prih3_file = new File(folder.getPath() + File.separator + PRIH3_NAME);
+            if (prih3_file.exists()) {
+                prih3DbfTextField.setText(prih3_file.getAbsolutePath());
+            }
+            File rash1_file = new File(folder.getPath() + File.separator + RASH1_NAME);
+            if (rash1_file.exists()) {
+                rash1DbfTextField.setText(rash1_file.getAbsolutePath());
+            }
+            File rash3_file = new File(folder.getPath() + File.separator + RASH3_NAME);
+            if (rash3_file.exists()) {
+                rash3DbfTextField.setText(rash3_file.getAbsolutePath());
+            }
+        }
     }
 
     private void exportListToOst(ArrayList<OstDetailPosition> ostDetailPositions, HashMap<ManipulatorIndex, OstDBValues> manipulatorIndexHashMap, OstStructure structure) {
