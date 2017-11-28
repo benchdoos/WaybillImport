@@ -36,12 +36,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.maykop_mmz.ppo.waybillImport.dbase3Dao.Dbase3Dao.backupFolder;
 import static com.maykop_mmz.ppo.waybillImport.dbase3Dao.Dbase3Dao.manipulatorIndexHashMap;
 
 public class MainFrame extends JFrame {
     private final Color DEFAULT_GREEN_COLOR = new Color(0, 172, 0);
     private final Color DEFAULT_ORANGE_COLOR = new Color(235, 143, 0);
+    private static final String TMP_OST_FILE_NAME = "OST_.dbf";
+
     private Logger log = Logger.getLogger(Logging.getCurrentClassName());
     private JPanel contentPane;
     private JButton buttonOK;
@@ -313,7 +314,7 @@ public class MainFrame extends JFrame {
     }
 
     private void exportListToOst(ArrayList<OstDetailPosition> ostDetailPositions, HashMap<ManipulatorIndex, OstDBValues> manipulatorIndexHashMap, OstStructure structure) {
-        final String pathname = structure.getFile().getParent() + File.separator + "OST_.dbf";
+        final String pathname = structure.getFile().getParent() + File.separator + TMP_OST_FILE_NAME;
         File file = new File(pathname);
 
         try (DBFReader reader = new DBFReader(new FileInputStream(structure.getFile()),
@@ -743,6 +744,10 @@ public class MainFrame extends JFrame {
             pushInfoToTextPane("Всего полей для изменения в базе: " + list.size(), Level.INFO);
 
             scanList(list);
+
+            String temp_file_path = Dbase3Dao.getOstStructure().getFile().getParent() + File.separator + TMP_OST_FILE_NAME;
+            File temp_ost_file = new File(temp_file_path);
+            temp_ost_file.delete();
 
             exportListToOst(list, Dbase3Dao.manipulatorIndexHashMap, Dbase3Dao.getOstStructure());
         } catch (IOException e) {
