@@ -736,6 +736,7 @@ public class MainFrame extends JFrame {
         }
 
         setEnabledUIElements(true);
+        buttonOK.setEnabled(false);
 
     }
 
